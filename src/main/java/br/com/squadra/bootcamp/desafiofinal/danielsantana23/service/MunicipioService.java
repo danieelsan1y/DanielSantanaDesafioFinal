@@ -19,11 +19,7 @@ public class MunicipioService {
 
     public MunicipioDTO salvar (MunicipioDTO municipioDTO) {
         Integer codigoUf = municipioDTO.getUf();
-
-        System.out.println(municipioDTO.getNome());
-
         Uf uf = ufRepository.findByCodigoUf(codigoUf);
-
         Municipio municipio = new Municipio();
         municipio.setCodigoMunicipio(municipioDTO.getCodigoMunicipio());
         municipio.setNome(municipioDTO.getNome());
