@@ -10,20 +10,20 @@ public class MunicipioDTO  implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoMunicipio;
-    private Integer uf;
+    private Integer codigoUf;
     private String nome;
     private Integer status;
 
-    public MunicipioDTO(Integer codigoMunicipio, Integer uf, String nome, Integer status) {
+    public MunicipioDTO(Integer codigoMunicipio, Integer codigoUf, String nome, Integer status) {
         this.codigoMunicipio = codigoMunicipio;
-        this.uf = uf;
+        this.codigoUf = codigoUf;
         this.nome = nome;
         this.status = status;
     }
 
     public MunicipioDTO(Municipio municipio) {
         this.codigoMunicipio = municipio.getCodigoMunicipio();
-        this.uf = municipio.getUf().getCodigoUf();
+        this.codigoUf = municipio.getUf().getCodigoUf();
         this.nome = municipio.getNome();
         this.status = municipio.getStatus();
     }
@@ -36,12 +36,12 @@ public class MunicipioDTO  implements Serializable {
         this.codigoMunicipio = codigoMunicipio;
     }
 
-    public Integer getUf() {
-        return uf;
+    public Integer getCodigoUf() {
+        return codigoUf;
     }
 
-    public void setUf(Integer uf) {
-        this.uf = uf;
+    public void setCodigoUf(Integer codigoUf) {
+        this.codigoUf = codigoUf;
     }
 
     public String getNome() {

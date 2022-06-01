@@ -35,7 +35,7 @@ public class UfController {
     }
 
     @PutMapping(value = "/{codigouf}")
-    ResponseEntity<Void> alterar(@RequestBody UfDTO ufDTO,@PathVariable Integer codigouf) {
+    ResponseEntity<Void> alterar(@Valid @RequestBody UfDTO ufDTO,@PathVariable Integer codigouf) {
         ufService.alterar(ufDTO,codigouf);
         return ResponseEntity.ok().build();
     }
@@ -53,7 +53,7 @@ public class UfController {
     }
 
     @PutMapping(value = "status/{codigoUf}")
-    ResponseEntity<Void> alterarStatus(@PathVariable Integer codigoUf, @RequestBody UfDTO ufDTO) {
+    ResponseEntity<Void> alterarStatus(@Valid @PathVariable Integer codigoUf, @RequestBody UfDTO ufDTO) {
         ufService.alterarStatusUf(codigoUf, ufDTO.getStatus());
         return ResponseEntity.ok().build();
 

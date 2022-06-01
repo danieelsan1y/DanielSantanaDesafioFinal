@@ -20,8 +20,7 @@ public class UfService {
         Uf uf = converterParaUf(ufDTO);
         converterParaMaiusculo(uf);
 
-        if(verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
-
+        if(!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
             ufRepository.save(uf);
             UfDTO novoUfDTO = new UfDTO();
             return novoUfDTO;
@@ -51,7 +50,7 @@ public class UfService {
     public UfDTO buscarPorNome(String nome) {
         nome = nome.toUpperCase();
 
-        if(verficarSeJaExisteNoBancoPorNome(nome) == false) {
+        if(verficarSeJaExisteNoBancoPorNome(nome)) {
             Uf uf = ufRepository.findByNome(nome);
             UfDTO ufDTO = new UfDTO(uf);
             return ufDTO;
@@ -63,9 +62,14 @@ public class UfService {
 
     public UfDTO buscarPorSigla(String sigla) {
         sigla = sigla.toUpperCase();
-        Uf uf = ufRepository.findBySigla(sigla);
-        UfDTO ufDTO = new UfDTO(uf);
-        return ufDTO;
+        if(verificarSeJaExisteNoBancoPorSigla(sigla)) {
+            Uf uf = ufRepository.findBySigla(sigla);
+            UfDTO ufDTO = new UfDTO(uf);
+            return ufDTO;
+        } else {
+            throw new ServiceException("Uf não existe no banco");
+        }
+
     }
 
     public void alterarStatusUf(Integer codigoUf, Integer status) {
@@ -94,8 +98,8 @@ public class UfService {
     }
 
     private boolean verficarSeJaExisteNoBancoPorCodigoUf(Integer codigoUf) {
-        Uf ufExistenteNome = ufRepository.findByCodigoUf(codigoUf);
-        if (ufExistenteNome != null) {
+        Uf ufExistenteCodigo = ufRepository.findByCodigoUf(codigoUf);
+        if (ufExistenteCodigo != null) {
             return true;
         } else {
             return false;
@@ -104,9 +108,18 @@ public class UfService {
     private boolean verficarSeJaExisteNoBancoPorNome(String nome) {
         Uf ufExistenteNome = ufRepository.findByNome(nome);
         if (ufExistenteNome != null) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean verificarSeJaExisteNoBancoPorSigla (String sigla) {
+        Uf ufExistenteSigla = ufRepository.findBySigla(sigla);
+        if (ufExistenteSigla != null) {
+            return true;
+        } else {
+            return false;
         }
     }
 

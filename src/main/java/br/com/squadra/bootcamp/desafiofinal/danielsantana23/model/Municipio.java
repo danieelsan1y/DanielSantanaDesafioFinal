@@ -1,9 +1,13 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "tb_municipio")
 @Entity
@@ -17,10 +21,14 @@ public class Municipio implements Serializable {
     @ManyToOne
     @JoinColumn(name = "codigo_uf")
     private Uf uf;
+    @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
     @Column(name = "nome", length = 256)
     private String nome;
     @Column(name = "status", length = 3)
     private Integer status;
+    @OneToMany(mappedBy = "municipio")
+    @JsonIgnore
+    List<Bairro> bairros = new ArrayList<>();
 
     public Municipio() {
 
@@ -32,6 +40,7 @@ public class Municipio implements Serializable {
         this.nome = nome;
         this.status = status;
     }
+
 
     public Integer getCodigoMunicipio() {
         return codigoMunicipio;
