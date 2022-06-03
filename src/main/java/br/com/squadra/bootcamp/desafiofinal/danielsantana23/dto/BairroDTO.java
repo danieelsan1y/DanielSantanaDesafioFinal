@@ -4,6 +4,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 public class BairroDTO implements Serializable {
@@ -13,20 +14,23 @@ public class BairroDTO implements Serializable {
     private Integer codigoBairro;
     private Integer codigoMunicipio;
     private String nome;
-    private Integer Status;
+    private Integer status;
+
+
+
 
     public BairroDTO(Bairro bairro) {
         this.codigoBairro = bairro.getCodigoBairro();
         this.codigoMunicipio = bairro.getMunicipio().getCodigoMunicipio();
         this.nome = bairro.getNome();
-        Status = bairro.getStatus();
+        status = bairro.getStatus();
     }
 
     public BairroDTO(Integer codigoBairro, Integer codigoMunicipio, String nome, Integer status) {
         this.codigoBairro = codigoBairro;
         this.codigoMunicipio = codigoMunicipio;
         this.nome = nome;
-        Status = status;
+        this.status = status;
     }
 
     public Integer getCodigoBairro() {
@@ -54,10 +58,10 @@ public class BairroDTO implements Serializable {
     }
 
     public Integer getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-        Status = status;
+        this.status = status;
     }
 }

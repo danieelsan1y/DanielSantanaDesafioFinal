@@ -5,6 +5,9 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UfDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -12,6 +15,8 @@ public class UfDTO implements Serializable {
     private String sigla;
     private String nome;
     private Integer status;
+
+    List<MunicipioDTO> municipioDTOS = new ArrayList<>();
 
     public UfDTO() {
     }

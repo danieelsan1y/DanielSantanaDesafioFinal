@@ -5,6 +5,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.MunicipioDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.BairroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,6 +32,34 @@ public class BairroController {
     ResponseEntity<List<BairroDTO>> buscarTodos() {
         List<BairroDTO> bairroDTOS = bairroService.buscarTodos();
         return ResponseEntity.ok().body(bairroDTOS);
+    }
+
+    @GetMapping(value = "{codigoBairro}")
+    ResponseEntity<BairroDTO> buscarPorCodigoBairro(@PathVariable Integer codigoBairro) {
+        BairroDTO bairroDTO = bairroService.buscarPorCodigoBairro(codigoBairro);
+        return ResponseEntity.ok().body(bairroDTO);
+    }
+
+    @GetMapping(value = "municipio/{codigoMunicipio}")
+    ResponseEntity<List<BairroDTO>> buscarPorCodigoMunicipio(@PathVariable Integer codigoMunicipio) {
+        List<BairroDTO> bairroDTOS = bairroService.buscarPorCodigoMunicipio(codigoMunicipio);
+        return ResponseEntity.ok().body(bairroDTOS);
+    }
+    @GetMapping(value = "status/{status}")
+    ResponseEntity<List<BairroDTO>> buscarStatus(@PathVariable Integer status) {
+        List<BairroDTO> bairroDTOS = bairroService.buscarStatus(status);
+        return ResponseEntity.ok().body(bairroDTOS);
+    }
+    @PutMapping(value = "status/{codigoBairro}")
+    ResponseEntity<List<BairroDTO>> alterarStatus(@RequestBody BairroDTO bairroDTO,@PathVariable Integer codigoBairro) {
+     bairroService.alterarStatus(bairroDTO,codigoBairro);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{codigoBairro}")
+    ResponseEntity<Void> alterar(@Valid @RequestBody BairroDTO bairroDTO, @PathVariable Integer codigoBairro) {
+        bairroService.alterar(bairroDTO,codigoBairro);
+        return ResponseEntity.ok().build();
     }
 
 }

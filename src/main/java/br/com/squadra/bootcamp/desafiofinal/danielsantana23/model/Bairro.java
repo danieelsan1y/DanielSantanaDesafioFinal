@@ -1,23 +1,31 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name ="tb_bairro")
+@Table(name = "tb_bairro")
 public class Bairro implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bairro_sequence")
     private Integer codigoBairro;
     @ManyToOne
     @JoinColumn(name = "codigo_municipio")
     private Municipio municipio;
-    @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
+
+   // @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
     private String nome;
-    private Integer Status;
+    private Integer status;
+    @JsonIgnore
+
+
     public Bairro() {
     }
 
@@ -25,7 +33,7 @@ public class Bairro implements Serializable {
         this.codigoBairro = codigoBairro;
         this.municipio = municipio;
         this.nome = nome;
-        Status = status;
+        this.status = status;
     }
 
     public Integer getCodigoBairro() {
@@ -53,10 +61,11 @@ public class Bairro implements Serializable {
     }
 
     public Integer getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-        Status = status;
+        this.status = status;
     }
+
 }

@@ -22,7 +22,7 @@ public class ControllerAdviceApi {
     }
 
     @ExceptionHandler(ConstraintViolationException.class) public ResponseEntity<SeviceErro> resourceNotFound(ConstraintViolationException e) {
-        String erro = "Campos obrigatórios em branco";
+        String erro = "Campo(s) obrigatório(s) em branco";
         HttpStatus status =  HttpStatus.NOT_FOUND;
         SeviceErro err = new SeviceErro(String.valueOf(status),"Campos Obrigatórios em branco");
         return ResponseEntity.status(status).body(err);

@@ -13,7 +13,7 @@ import java.util.List;
 public class Uf implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "uf_sequence")
     @Column(name = "codigo_uf", length = 9)
     private Integer codigoUf;
     @NotEmpty(message = "O campo sigla não pode ser vazio, insira novamente!")
@@ -26,7 +26,6 @@ public class Uf implements Serializable {
     private Integer status;
 
     @OneToMany(mappedBy = "uf")
-    @JsonIgnore
     private List<Municipio> municipios = new ArrayList<>();
 
     public Uf() {
@@ -71,5 +70,8 @@ public class Uf implements Serializable {
         this.status = status;
     }
 
+    public List<Municipio> getMunicipios() {
+        return municipios;
+    }
 
 }

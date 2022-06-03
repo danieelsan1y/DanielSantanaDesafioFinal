@@ -85,12 +85,20 @@ public class MunicipioService {
         List<MunicipioDTO> municipioDTO = municipios.stream().map(municipio -> new MunicipioDTO(municipio)).collect(Collectors.toList());
         return municipioDTO;
     }
+    public void alterarStatus(MunicipioDTO municipioDTO, Integer codigoMunicipio) {
+        if(verficarSeJaExisteNoBancoPorCodigoMunicipio(codigoMunicipio)) {
+            Municipio municipio = municipioRepository.findByCodigoMunicipio(codigoMunicipio);
+            municipio.setStatus(municipioDTO.getStatus());
+            municipioRepository.save(municipio);
+        } else  {
+            throw new ServiceException("Bairro com id: "+codigoMunicipio+ " não existe no banco");
+        }
+    }
 
     private void alterarCampos(MunicipioDTO municipioDTO, Municipio municipioAntigo) {
 
         Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
         municipioAntigo.setNome(municipioDTO.getNome().toUpperCase());
-        municipioAntigo.setStatus(municipioDTO.getStatus());
         municipioAntigo.setUf(uf);
 
     }
@@ -127,4 +135,6 @@ public class MunicipioService {
         Municipio municipio = new Municipio(municipioDTO.getCodigoMunicipio(), uf, municipioDTO.getNome(), municipioDTO.getStatus());
         return municipio;
     }
+
+
 }

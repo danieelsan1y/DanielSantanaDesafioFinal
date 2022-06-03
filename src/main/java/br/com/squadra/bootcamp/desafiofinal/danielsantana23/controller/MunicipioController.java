@@ -51,6 +51,11 @@ public class MunicipioController {
     ResponseEntity<List<MunicipioDTO>> buscarStatus (@PathVariable Integer status) {
         List<MunicipioDTO> municipiosDTO = municipioService.buscarStatus(status);
         return ResponseEntity.ok().body(municipiosDTO);
+    }
 
+    @PutMapping(value = "status/{codigoMunicipio}")
+    ResponseEntity<Void> alterarStatus (@RequestBody MunicipioDTO municipioDTO,@PathVariable Integer codigoMunicipio) {
+       municipioService.alterarStatus(municipioDTO,codigoMunicipio);
+        return ResponseEntity.ok().build();
     }
 }

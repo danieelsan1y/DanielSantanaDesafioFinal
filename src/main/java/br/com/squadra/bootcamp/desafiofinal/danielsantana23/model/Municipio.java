@@ -15,9 +15,10 @@ public class Municipio implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "municipio_sequence")
     @Column(name = "codigo_municipio", length = 9)
     private Integer codigoMunicipio;
+
     @ManyToOne
     @JoinColumn(name = "codigo_uf")
     private Uf uf;

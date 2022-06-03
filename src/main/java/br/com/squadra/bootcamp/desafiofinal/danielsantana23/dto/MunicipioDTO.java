@@ -59,4 +59,5 @@ public class MunicipioDTO  implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
 }
