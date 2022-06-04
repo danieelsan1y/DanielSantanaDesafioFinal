@@ -1,4 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 

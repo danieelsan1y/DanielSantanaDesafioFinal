@@ -1,6 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.BairroDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.BairroDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.BairroRepository;

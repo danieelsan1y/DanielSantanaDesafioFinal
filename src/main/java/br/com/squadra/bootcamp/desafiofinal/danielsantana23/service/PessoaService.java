@@ -1,9 +1,9 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.EnderecoDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.PessoaEnderecoDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.PessoaDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.PessoaSalvarDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.EnderecoDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaEnderecoDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;

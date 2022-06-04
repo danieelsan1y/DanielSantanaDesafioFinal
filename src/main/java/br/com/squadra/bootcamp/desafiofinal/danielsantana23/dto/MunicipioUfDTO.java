@@ -1,7 +1,6 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 
 import java.io.Serializable;
 

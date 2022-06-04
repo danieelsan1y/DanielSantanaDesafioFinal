@@ -1,6 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
-
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
 import java.io.Serializable;
 import java.util.List;

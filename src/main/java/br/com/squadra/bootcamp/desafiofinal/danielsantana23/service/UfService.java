@@ -1,6 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.UfDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.UfRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
