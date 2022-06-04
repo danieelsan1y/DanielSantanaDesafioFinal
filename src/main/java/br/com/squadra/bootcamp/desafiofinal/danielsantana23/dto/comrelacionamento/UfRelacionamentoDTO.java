@@ -1,27 +1,21 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.comrelacionamento;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class UfDTO implements Serializable {
+public class UfRelacionamentoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer codigoUf;
     private String sigla;
     private String nome;
     private Integer status;
 
-    List<MunicipioDTO> municipioDTOS = new ArrayList<>();
 
-    public UfDTO() {
+    public UfRelacionamentoDTO() {
     }
 
-    public UfDTO(Uf uf) {
+    public UfRelacionamentoDTO(Uf uf) {
         this.codigoUf = uf.getCodigoUf();
         this.sigla = uf.getSigla();
         this.nome = uf.getNome();

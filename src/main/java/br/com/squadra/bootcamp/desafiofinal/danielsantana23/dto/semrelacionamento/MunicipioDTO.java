@@ -1,4 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
@@ -14,8 +14,7 @@ public class MunicipioDTO  implements Serializable {
     private Integer codigoUf;
     private String nome;
     private Integer status;
-@JsonIgnore
-    private UfDTO uf;
+
 
 
     public MunicipioDTO(Integer codigoMunicipio, Integer codigoUf, String nome, Integer status) {
@@ -31,7 +30,6 @@ public class MunicipioDTO  implements Serializable {
         this.codigoUf = municipio.getUf().getCodigoUf();
         this.nome = municipio.getNome();
         this.status = municipio.getStatus();
-        uf = new UfDTO(municipio.getUf());
 
     }
 
@@ -67,7 +65,5 @@ public class MunicipioDTO  implements Serializable {
         this.status = status;
     }
 
-    public UfDTO getUf() {
-        return uf;
-    }
+
 }

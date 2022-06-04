@@ -1,4 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
@@ -16,8 +16,7 @@ public class EnderecoDTO implements Serializable {
     private String numero;
     private String complemento;
     private String cep;
-@JsonIgnore
-    private BairroDTO bairro;
+
 
     public EnderecoDTO(Integer codigoEndereco, Integer codigoBairro, String nomeRua, String numero, String complemento, String cep) {
         this.codigoEndereco = codigoEndereco;
@@ -35,7 +34,6 @@ public class EnderecoDTO implements Serializable {
         this.numero = endereco.getNumero();
         this.complemento = endereco.getComplemento();
         this.cep = endereco.getCep();
-        bairro = new BairroDTO(endereco.getBairro());
     }
 
     public Integer getCodigoEndereco() {
@@ -85,7 +83,5 @@ public class EnderecoDTO implements Serializable {
     public void setCep(String cep) {
         this.cep = cep;
     }
-    public BairroDTO getBairro() {
-        return bairro;
-    }
+
 }

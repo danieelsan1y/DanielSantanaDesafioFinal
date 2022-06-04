@@ -1,11 +1,10 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.UfService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

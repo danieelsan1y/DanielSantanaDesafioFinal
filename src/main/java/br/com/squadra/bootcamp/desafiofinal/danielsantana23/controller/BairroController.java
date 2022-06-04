@@ -1,11 +1,8 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.BairroDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.MunicipioDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento.BairroDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.BairroService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
