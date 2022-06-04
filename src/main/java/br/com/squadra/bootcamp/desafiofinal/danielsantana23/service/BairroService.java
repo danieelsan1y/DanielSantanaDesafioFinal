@@ -100,6 +100,7 @@ public class BairroService {
 
         Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
         bairroAntigo.setNome(bairroDTO.getNome().toUpperCase());
+        bairroAntigo.setStatus(bairroDTO.getStatus());
         bairroAntigo.setMunicipio(municipio);
 
     }

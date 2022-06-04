@@ -88,6 +88,7 @@ public class UfService {
     private void alterarCampos(Uf ufNovo, Uf ufAntigo) {
         ufAntigo.setSigla(ufNovo.getSigla());
         ufAntigo.setNome(ufNovo.getNome());
+        ufAntigo.setStatus(ufNovo.getStatus());
         converterParaMaiusculo(ufAntigo);
     }
 
