@@ -99,7 +99,9 @@ public class MunicipioService {
 
         Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
         municipioAntigo.setNome(municipioDTO.getNome().toUpperCase());
+        municipioAntigo.setStatus(municipioDTO.getStatus());
         municipioAntigo.setUf(uf);
+
 
     }
 

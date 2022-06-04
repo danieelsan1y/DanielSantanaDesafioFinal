@@ -1,4 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.comrelacionamento;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PessoaRelacionamentoDTO implements Serializable {
+public class PessoaEnderecoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoPessoa;
@@ -14,16 +14,16 @@ public class PessoaRelacionamentoDTO implements Serializable {
     private String sobrenome;
     private String login;
     private String senha;
-   private  Set<EnderecoRelacionamentoDTO> enderecos;
+   private  Set<EnderecoBairroDTO> enderecos;
     private Integer status;
-    public PessoaRelacionamentoDTO(Pessoa pessoa) {
+    public PessoaEnderecoDTO(Pessoa pessoa) {
         this.codigoPessoa = pessoa.getCodigoPessoa();
         this.nome = pessoa.getNome();
         this.sobrenome = pessoa.getSobrenome();
         this.login = pessoa.getLogin();
         this.senha = pessoa.getSenha();
         this.status = pessoa.getStatus();
-        enderecos = pessoa.getEnderecos().stream().map(endereco -> new EnderecoRelacionamentoDTO(endereco)).collect(Collectors.toSet());
+        enderecos = pessoa.getEnderecos().stream().map(endereco -> new EnderecoBairroDTO(endereco)).collect(Collectors.toSet());
     }
 
     public Integer getCodigoPessoa() {
@@ -74,7 +74,11 @@ public class PessoaRelacionamentoDTO implements Serializable {
         this.status = status;
     }
 
-    public Set<EnderecoRelacionamentoDTO> getEnderecos() {
+    public Set<EnderecoBairroDTO> getEnderecos() {
         return enderecos;
+    }
+
+    public void setEnderecos(Set<EnderecoBairroDTO> enderecos) {
+        this.enderecos = enderecos;
     }
 }

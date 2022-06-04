@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
 
-    @Query(" SELECT p from Pessoa p LEFT JOIN FETCH p.enderecos WHERE p.codigoPessoa = :codigoPessoa ")
-    Pessoa findAllByCodigoPessoa(@Param("codigoPessoa") Integer codigoPessoa);
+
+    Pessoa findByCodigoPessoa(@Param("codigoPessoa") Integer codigoPessoa);
 
 }

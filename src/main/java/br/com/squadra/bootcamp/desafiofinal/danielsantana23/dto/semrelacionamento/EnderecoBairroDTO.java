@@ -1,10 +1,10 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.comrelacionamento;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
 
 import java.io.Serializable;
 
-public class EnderecoRelacionamentoDTO implements Serializable {
+public class EnderecoBairroDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoEndereco;
@@ -13,9 +13,9 @@ public class EnderecoRelacionamentoDTO implements Serializable {
     private String numero;
     private String complemento;
     private String cep;
-    private BairroRelacionamentoDTO bairro;
+    private BairroMunicipioDTO bairro;
 
-    public EnderecoRelacionamentoDTO(Integer codigoEndereco, Integer codigoBairro, String nomeRua, String numero, String complemento, String cep) {
+    public EnderecoBairroDTO(Integer codigoEndereco, Integer codigoBairro, String nomeRua, String numero, String complemento, String cep) {
         this.codigoEndereco = codigoEndereco;
         this.codigoBairro = codigoBairro;
         this.nomeRua = nomeRua;
@@ -24,14 +24,14 @@ public class EnderecoRelacionamentoDTO implements Serializable {
         this.cep = cep;
     }
 
-    public EnderecoRelacionamentoDTO(Endereco endereco) {
+    public EnderecoBairroDTO(Endereco endereco) {
         this.codigoEndereco = endereco.getCodigoEndereco();
         this.codigoBairro = endereco.getBairro().getCodigoBairro();
         this.nomeRua = endereco.getNomeRua();
         this.numero = endereco.getNumero();
         this.complemento = endereco.getComplemento();
         this.cep = endereco.getCep();
-        bairro = new BairroRelacionamentoDTO(endereco.getBairro());
+        bairro = new BairroMunicipioDTO(endereco.getBairro());
     }
 
     public Integer getCodigoEndereco() {
@@ -81,7 +81,12 @@ public class EnderecoRelacionamentoDTO implements Serializable {
     public void setCep(String cep) {
         this.cep = cep;
     }
-    public BairroRelacionamentoDTO getBairro() {
+
+    public BairroMunicipioDTO getBairro() {
         return bairro;
+    }
+
+    public void setBairro(BairroMunicipioDTO bairro) {
+        this.bairro = bairro;
     }
 }

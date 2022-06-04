@@ -1,20 +1,21 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.comrelacionamento;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.semrelacionamento;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 
 import java.io.Serializable;
 
-public class MunicipioRelacionamentoDTO implements Serializable {
+public class MunicipioUfDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoMunicipio;
     private Integer codigoUf;
     private String nome;
     private Integer status;
-    private UfRelacionamentoDTO uf;
+    private UfDTO ufDTO;
 
 
-    public MunicipioRelacionamentoDTO(Integer codigoMunicipio, Integer codigoUf, String nome, Integer status) {
+    public MunicipioUfDTO(Integer codigoMunicipio, Integer codigoUf, String nome, Integer status) {
         this.codigoMunicipio = codigoMunicipio;
         this.codigoUf = codigoUf;
         this.nome = nome;
@@ -22,12 +23,12 @@ public class MunicipioRelacionamentoDTO implements Serializable {
 
     }
 
-    public MunicipioRelacionamentoDTO(Municipio municipio) {
+    public MunicipioUfDTO(Municipio municipio) {
         this.codigoMunicipio = municipio.getCodigoMunicipio();
         this.codigoUf = municipio.getUf().getCodigoUf();
         this.nome = municipio.getNome();
         this.status = municipio.getStatus();
-        uf = new UfRelacionamentoDTO(municipio.getUf());
+        ufDTO = new UfDTO(municipio.getUf());
 
     }
 
@@ -63,7 +64,11 @@ public class MunicipioRelacionamentoDTO implements Serializable {
         this.status = status;
     }
 
-    public UfRelacionamentoDTO getUf() {
-        return uf;
+    public UfDTO getUfDTO() {
+        return ufDTO;
+    }
+
+    public void setUfDTO(UfDTO ufDTO) {
+        this.ufDTO = ufDTO;
     }
 }
