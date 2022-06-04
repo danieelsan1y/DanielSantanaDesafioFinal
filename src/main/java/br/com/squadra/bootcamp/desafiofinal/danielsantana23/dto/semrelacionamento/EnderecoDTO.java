@@ -16,15 +16,17 @@ public class EnderecoDTO implements Serializable {
     private String numero;
     private String complemento;
     private String cep;
+    private Integer status;
 
 
-    public EnderecoDTO(Integer codigoEndereco, Integer codigoBairro, String nomeRua, String numero, String complemento, String cep) {
+    public EnderecoDTO(Integer codigoEndereco, Integer codigoBairro, String nomeRua, String numero, String complemento, String cep, Integer status) {
         this.codigoEndereco = codigoEndereco;
         this.codigoBairro = codigoBairro;
         this.nomeRua = nomeRua;
         this.numero = numero;
         this.complemento = complemento;
         this.cep = cep;
+        this.status = status;
     }
 
     public EnderecoDTO(Endereco endereco) {
@@ -34,6 +36,7 @@ public class EnderecoDTO implements Serializable {
         this.numero = endereco.getNumero();
         this.complemento = endereco.getComplemento();
         this.cep = endereco.getCep();
+        this.status = endereco.getStatus();
     }
 
     public Integer getCodigoEndereco() {
@@ -84,4 +87,11 @@ public class EnderecoDTO implements Serializable {
         this.cep = cep;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 }

@@ -96,4 +96,8 @@ public class Pessoa implements Serializable {
     public Set<Endereco> getEnderecos() {
         return enderecos;
     }
+
+    public void setEnderecos(Set<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
 }
