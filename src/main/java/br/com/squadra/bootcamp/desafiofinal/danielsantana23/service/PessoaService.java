@@ -30,14 +30,21 @@ public class PessoaService {
     BairroRepository bairroRepository;
 
     public void salvar(PessoaSalvarDTO pessoaSalvarDTO) {
-        Pessoa pessoa = new Pessoa();
-        pessoa.setNome(pessoaSalvarDTO.getNome());
-        pessoa.setStatus(pessoaSalvarDTO.getStatus());
-        pessoa.setLogin(pessoaSalvarDTO.getLogin());
-        pessoa.setSenha(pessoaSalvarDTO.getSenha());
-        pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome());
-        pessoaRepository.save(pessoa);
-        salvarEnderecos(pessoa,pessoaSalvarDTO.getEnderecosDTO());
+
+        pessoaSalvarDTO.setLogin(pessoaSalvarDTO.getLogin().toLowerCase());
+        if(!verficarSeJaExisteNoBancoPorLogin(pessoaSalvarDTO.getLogin())) {
+            Pessoa pessoa = new Pessoa();
+            pessoa.setNome(pessoaSalvarDTO.getNome());
+            pessoa.setStatus(pessoaSalvarDTO.getStatus());
+            pessoa.setLogin(pessoaSalvarDTO.getLogin());
+            pessoa.setSenha(pessoaSalvarDTO.getSenha());
+            pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome());
+            pessoaRepository.save(pessoa);
+            salvarEnderecos(pessoa,pessoaSalvarDTO.getEnderecosDTO());
+        } else{
+            throw new ServiceException("Login " + pessoaSalvarDTO.getLogin()+ " já cadastrado no banco!");
+        }
+
 
     }
 
@@ -53,8 +60,6 @@ public class PessoaService {
             novosEnderecos.setComplemento(endereco.getComplemento());
             novosEnderecos.setStatus(1);
             enderecoRepository.save(novosEnderecos);
-
-
             return novosEnderecos;
         }).collect(Collectors.toList());
     }
@@ -74,6 +79,15 @@ public class PessoaService {
             throw new ServiceException("Pessoa com codigoPessoa: " + codigoPessoa + ", não esta cadastrado no Banco!");
         }
 
+    }
+
+    private boolean verficarSeJaExisteNoBancoPorLogin(String login) {
+        Pessoa PessoaExistenteLogin = pessoaRepository.findByLogin(login);
+        if (PessoaExistenteLogin != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private boolean verficarSeJaExisteNoBancoPorCodigoPessoa(Integer codigoPessoa) {

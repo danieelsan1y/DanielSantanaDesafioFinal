@@ -12,5 +12,6 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
 
 
     Pessoa findByCodigoPessoa(@Param("codigoPessoa") Integer codigoPessoa);
+    Pessoa findByLogin(@Param("login") String login);
 
 }
