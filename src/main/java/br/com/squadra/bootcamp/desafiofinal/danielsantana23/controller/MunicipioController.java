@@ -31,27 +31,29 @@ public class MunicipioController {
         List<MunicipioDTO> municipiosDTO = municipioService.buscarTodos();
         return ResponseEntity.ok().body(municipiosDTO);
     }
-    @GetMapping(value = "/{codigoMunicipio}")
-    ResponseEntity<MunicipioDTO> buscarPorCodigoMunicipio(@PathVariable Integer codigoMunicipio) {
+    @GetMapping(params = "codigoMunicipio")
+    ResponseEntity<MunicipioDTO> buscarPorCodigoMunicipio(@RequestParam Integer codigoMunicipio) {
         MunicipioDTO municipioDTO = municipioService.buscarPorCodigoMunicipio(codigoMunicipio);
         return  ResponseEntity.ok().body(municipioDTO);
     }
 
-    @GetMapping(value = "uf/{codigoUf}")
-    ResponseEntity<List<MunicipioDTO>> buscarPorCodigoUf(@PathVariable Integer codigoUf) {
+    @GetMapping(params = "codigoUf")
+    ResponseEntity<List<MunicipioDTO>> buscarPorCodigoUf(@RequestParam Integer codigoUf) {
         List<MunicipioDTO> municipiosDTO = municipioService.buscarPorCodigoUf(codigoUf);
         return  ResponseEntity.ok().body(municipiosDTO);
     }
+    @GetMapping(params = "status")
+    ResponseEntity<List<MunicipioDTO>> buscarStatus (@RequestParam Integer status) {
+        List<MunicipioDTO> municipiosDTO = municipioService.buscarStatus(status);
+        return ResponseEntity.ok().body(municipiosDTO);
+    }
+
     @PutMapping(value = "/{codigoMunicipio}")
     ResponseEntity<Void> alterar(@Valid @RequestBody MunicipioDTO municipioDTO, @PathVariable Integer codigoMunicipio) {
         municipioService.alterar(municipioDTO,codigoMunicipio);
         return ResponseEntity.ok().build();
     }
-    @GetMapping(value = "status/{status}")
-    ResponseEntity<List<MunicipioDTO>> buscarStatus (@PathVariable Integer status) {
-        List<MunicipioDTO> municipiosDTO = municipioService.buscarStatus(status);
-        return ResponseEntity.ok().body(municipiosDTO);
-    }
+
 
     @PutMapping(value = "status/{codigoMunicipio}")
     ResponseEntity<Void> alterarStatus (@RequestBody MunicipioDTO municipioDTO,@PathVariable Integer codigoMunicipio) {

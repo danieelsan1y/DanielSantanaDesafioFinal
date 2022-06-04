@@ -13,12 +13,12 @@ public class Pessoa implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_sequence")
-    @Column(name = "codigo_municipio", length = 9)
+    @Column(name = "codigo_pessoa", length = 9)
     private Integer codigoPessoa;
     //@NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
 
     @OneToMany(mappedBy = "pessoa")
-    private Set<Endereco> pessoas = new HashSet<>();
+    private Set<Endereco> enderecos;
     @Column(name = "nome", length = 256)
     private String nome;
     //@NotEmpty(message = "O campo sobrenome não pode ser vazio, insira novamente!")
@@ -93,4 +93,7 @@ public class Pessoa implements Serializable {
         this.status = status;
     }
 
+    public Set<Endereco> getEnderecos() {
+        return enderecos;
+    }
 }

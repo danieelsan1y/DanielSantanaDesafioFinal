@@ -1,6 +1,8 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller.exceptions;
 
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.PessoaRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,12 @@ public class PessoaController {
     @Autowired
     PessoaService pessoaService;
 
+    @Autowired
+    PessoaRepository repository;
+
     @GetMapping
-    ResponseEntity<List<Pessoa>> buscarTodas() {
-        List<Pessoa> pessoas = pessoaService.buscarTodas();
+    ResponseEntity<List<PessoaDTO>> buscarTodas() {
+        List<PessoaDTO> pessoas = pessoaService.buscarTodas();
         return ResponseEntity.ok().body(pessoas);
      }
 }

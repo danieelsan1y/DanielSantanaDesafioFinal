@@ -32,6 +32,7 @@ public class MunicipioService {
             municipio.setNome(municipioDTO.getNome());
             municipio.setStatus(municipioDTO.getStatus());
             municipio.setUf(uf);
+            uf.getMunicipios().add(municipio);
             municipioRepository.save(municipio);
 
             MunicipioDTO novoMunicipioDTO = new MunicipioDTO(municipio);

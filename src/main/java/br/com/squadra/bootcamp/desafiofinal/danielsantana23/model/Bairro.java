@@ -20,7 +20,7 @@ public class Bairro implements Serializable {
     @JoinColumn(name = "codigo_municipio")
     private Municipio municipio;
 
-   // @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
+   @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
     private String nome;
     private Integer status;
     @JsonIgnore
