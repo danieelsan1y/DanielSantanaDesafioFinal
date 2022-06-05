@@ -16,8 +16,14 @@ public class UfDTO implements Serializable {
     private String nome;
     private Integer status;
 
-
     public UfDTO() {
+    }
+
+    public UfDTO(Integer codigoUf, String sigla, String nome, Integer status) {
+        this.codigoUf = codigoUf;
+        this.sigla = sigla;
+        this.nome = nome;
+        this.status = status;
     }
 
     public UfDTO(Uf uf) {

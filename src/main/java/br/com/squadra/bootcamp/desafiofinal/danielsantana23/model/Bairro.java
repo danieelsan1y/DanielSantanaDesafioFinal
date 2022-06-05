@@ -23,7 +23,7 @@ public class Bairro implements Serializable {
    @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
     private String nome;
     private Integer status;
-    @JsonIgnore
+
 
 
     public Bairro() {

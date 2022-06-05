@@ -19,10 +19,10 @@ public class BairroController {
     BairroService bairroService;
 
     @PostMapping
-    ResponseEntity<Void> savar(@Valid @RequestBody BairroDTO bairroDTO) {
-        BairroDTO novoBairroDTO = bairroService.salvar(bairroDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigoMunicipio}").buildAndExpand(novoBairroDTO.getCodigoBairro()).toUri();
-        return ResponseEntity.created(uri).build();
+    ResponseEntity<List<BairroDTO>> savar(@Valid @RequestBody BairroDTO bairroDTO) {
+        bairroService.salvar(bairroDTO);
+        List<BairroDTO> bairroDTOS = bairroService.buscarTodos();
+        return ResponseEntity.ok().body(bairroDTOS);
     }
 
     @GetMapping
@@ -31,32 +31,28 @@ public class BairroController {
         return ResponseEntity.ok().body(bairroDTOS);
     }
 
-    @GetMapping(value = "{codigoBairro}")
-    ResponseEntity<BairroDTO> buscarPorCodigoBairro(@PathVariable Integer codigoBairro) {
+    @GetMapping(params = "codigoBairro")
+    ResponseEntity<BairroDTO> buscarPorCodigoBairro(@RequestParam Integer codigoBairro) {
         BairroDTO bairroDTO = bairroService.buscarPorCodigoBairro(codigoBairro);
         return ResponseEntity.ok().body(bairroDTO);
     }
 
-    @GetMapping(value = "municipio/{codigoMunicipio}")
-    ResponseEntity<List<BairroDTO>> buscarPorCodigoMunicipio(@PathVariable Integer codigoMunicipio) {
+    @GetMapping(params = "codigoMunicipio")
+    ResponseEntity<List<BairroDTO>> buscarPorCodigoMunicipio(@RequestParam Integer codigoMunicipio) {
         List<BairroDTO> bairroDTOS = bairroService.buscarPorCodigoMunicipio(codigoMunicipio);
         return ResponseEntity.ok().body(bairroDTOS);
     }
-    @GetMapping(value = "status/{status}")
-    ResponseEntity<List<BairroDTO>> buscarStatus(@PathVariable Integer status) {
+    @GetMapping(params = "status")
+    ResponseEntity<List<BairroDTO>> buscarStatus(@RequestParam Integer status) {
         List<BairroDTO> bairroDTOS = bairroService.buscarStatus(status);
         return ResponseEntity.ok().body(bairroDTOS);
     }
-    @PutMapping(value = "status/{codigoBairro}")
-    ResponseEntity<List<BairroDTO>> alterarStatus(@RequestBody BairroDTO bairroDTO,@PathVariable Integer codigoBairro) {
-     bairroService.alterarStatus(bairroDTO,codigoBairro);
-        return ResponseEntity.ok().build();
-    }
 
     @PutMapping(value = "/{codigoBairro}")
-    ResponseEntity<Void> alterar(@Valid @RequestBody BairroDTO bairroDTO, @PathVariable Integer codigoBairro) {
+    ResponseEntity<List<BairroDTO>> alterar(@Valid @RequestBody BairroDTO bairroDTO, @PathVariable Integer codigoBairro) {
         bairroService.alterar(bairroDTO,codigoBairro);
-        return ResponseEntity.ok().build();
+        List<BairroDTO> bairroDTOS = bairroService.buscarTodos();
+        return ResponseEntity.ok().body(bairroDTOS);
     }
 
 }

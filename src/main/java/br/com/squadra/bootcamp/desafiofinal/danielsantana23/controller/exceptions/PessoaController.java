@@ -30,14 +30,14 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoasDTO);
     }
 
-    @GetMapping(value = "/{codigoPessoa}")
-    ResponseEntity<PessoaEnderecoDTO> buscarPorCodigoPessoa(@PathVariable Integer codigoPessoa) {
+    @GetMapping(params = "codigoPessoa")
+    ResponseEntity<PessoaEnderecoDTO> buscarPorCodigoPessoa(@RequestParam Integer codigoPessoa) {
         PessoaEnderecoDTO pessoaComRelaiconamentoDTO = pessoaService.buscarPessoaPorCodigoPessoa(codigoPessoa);
         return ResponseEntity.ok().body(pessoaComRelaiconamentoDTO);
     }
 
     @PutMapping(value = "/{codigoPessoa}")
-    ResponseEntity<Void> alterar (@RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO, @PathVariable Integer codigoPessoa  ) {
+    ResponseEntity<Void> alterar (@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO, @PathVariable Integer codigoPessoa  ) {
        pessoaService.atualizar(pessoaSalvarDTO, codigoPessoa);
         return ResponseEntity.ok().build();
 

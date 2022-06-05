@@ -16,14 +16,16 @@ public class UfService {
     @Autowired
     private UfRepository ufRepository;
 
-    public UfDTO salvar(UfDTO ufDTO) {
-        Uf uf = converterParaUf(ufDTO);
+    public void salvar(UfDTO ufDTO) {
+        Uf uf = new Uf();
+        uf.setStatus(ufDTO.getStatus());
+        uf.setSigla(ufDTO.getSigla());
+        uf.setNome(ufDTO.getNome());
         converterParaMaiusculo(uf);
 
         if(!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
             ufRepository.save(uf);
             UfDTO novoUfDTO = new UfDTO();
-            return novoUfDTO;
         } else {
             throw new ServiceException("Uf já cadastrado no banco!");
         }
@@ -42,7 +44,7 @@ public class UfService {
             alterarCampos(ufNovo, ufAntigo);
             ufRepository.save(ufAntigo);
         } else {
-            throw new ServiceException("Uf não existe no banco");
+            throw new ServiceException("Uf com o codigoUf: " + codigoUf + " não esta cadastrado no Banco!");
         }
 
     }
@@ -55,7 +57,7 @@ public class UfService {
             UfDTO ufDTO = new UfDTO(uf);
             return ufDTO;
         } else {
-            throw new ServiceException("Uf não existe no banco");
+            throw new ServiceException("Uf com o nome: " +nome+ ", não existe no banco");
         }
 
     }
@@ -67,16 +69,9 @@ public class UfService {
             UfDTO ufDTO = new UfDTO(uf);
             return ufDTO;
         } else {
-            throw new ServiceException("Uf não existe no banco");
+            throw new ServiceException("Uf com a sigla: "+sigla+",não existe no banco");
         }
 
-    }
-
-    public void alterarStatusUf(Integer codigoUf, Integer status) {
-
-        Uf uf = ufRepository.findByCodigoUf(codigoUf);
-        uf.setStatus(status);
-        ufRepository.save(uf);
     }
 
     public List<UfDTO> buscarUmStatus(Integer status) {

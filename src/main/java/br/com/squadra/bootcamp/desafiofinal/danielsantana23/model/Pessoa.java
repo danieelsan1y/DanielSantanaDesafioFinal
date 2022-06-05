@@ -21,13 +21,13 @@ public class Pessoa implements Serializable {
     private Set<Endereco> enderecos;
     @Column(name = "nome", length = 256)
     private String nome;
-    //@NotEmpty(message = "O campo sobrenome não pode ser vazio, insira novamente!")
+    @NotEmpty(message = "O campo sobrenome não pode ser vazio, insira novamente!")
     @Column(name = "sobrenome", length = 256)
     private String sobrenome;
-    //  @NotEmpty(message = "O campo login não pode ser vazio, insira novamente!")
+     @NotEmpty(message = "O campo login não pode ser vazio, insira novamente!")
     @Column(name = "login", length = 50)
     private String login;
-    // @NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")
+    @NotEmpty(message = "O campo senha não pode ser vazio, insira novamente!")
     @Column(name = "senha", length = 50)
     private String senha;
     @Column(name = "status", length = 3)

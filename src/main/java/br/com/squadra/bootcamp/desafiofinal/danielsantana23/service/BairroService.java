@@ -21,7 +21,7 @@ public class BairroService {
     @Autowired
     MunicipioRepository municipioRepository;
 
-    public BairroDTO salvar(BairroDTO bairroDTO) {
+    public void salvar(BairroDTO bairroDTO) {
         bairroDTO.setNome(bairroDTO.getNome().toUpperCase());
         if (!verificarSeBairroJaExisteNoBancoPorNome(bairroDTO.getNome())) {
             Integer codigoMunicipio = bairroDTO.getCodigoMunicipio();
@@ -31,8 +31,7 @@ public class BairroService {
             bairro.setMunicipio(municipio);
             bairro.setNome(bairroDTO.getNome());
             bairroRepository.save(bairro);
-            BairroDTO novoBairroDTO = new BairroDTO(bairro);
-            return novoBairroDTO;
+
         } else {
             throw new ServiceException("Bairro " + bairroDTO.getNome() + " já cadastrado no banco!");
         }
@@ -69,15 +68,7 @@ public class BairroService {
         List<BairroDTO> bairrosDTO = bairros.stream().map(bairro -> new BairroDTO(bairro)).collect(Collectors.toList());
         return bairrosDTO;
     }
-    public void alterarStatus (BairroDTO bairroDTO,Integer codigoBairro) {
-        if(verficarSeJaExisteNoBancoPorCodigoMunicipio(codigoBairro)) {
-            Bairro bairro = bairroRepository.findByCodigoBairro(codigoBairro);
-            bairro.setStatus(bairroDTO.getStatus());
-            bairroRepository.save(bairro);
-        } else {
-            throw new ServiceException("Bairro com id: "+codigoBairro+ " não existe no banco");
-        }
-    }
+
     public void alterar(BairroDTO bairroDTO, Integer codigoBairro) {
         if (verificarSeBairroJaExisteNoBancoPorCodigoBairro(codigoBairro)){
             Bairro bairroAntigo = bairroRepository.findByCodigoBairro(codigoBairro);

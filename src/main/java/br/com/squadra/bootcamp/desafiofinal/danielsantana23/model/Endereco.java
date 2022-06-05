@@ -1,6 +1,7 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Entity
@@ -18,12 +19,16 @@ public class Endereco implements Serializable {
     @ManyToOne
     @JoinColumn(name = "codigo_bairro")
     private Bairro bairro;
+    @NotEmpty(message = "O campo nome rua não pode ser vazio, insira novamente!")
     @Column(name = "nome_rua", length = 256)
     private String nomeRua;
+    @NotEmpty(message = "O campo numero não pode ser vazio, insira novamente!")
     @Column(name = "numero", length = 256)
     private String numero;
+    @NotEmpty(message = "O campo complemento não pode ser vazio, insira novamente!")
     @Column(name = "complemento", length = 20)
     private String complemento;
+    @NotEmpty(message = "O campo cep não pode ser vazio, insira novamente!")
     @Column(name = "cep", length = 10)
     private String cep;
 

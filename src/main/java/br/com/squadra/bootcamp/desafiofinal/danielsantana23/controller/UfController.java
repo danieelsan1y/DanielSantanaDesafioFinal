@@ -21,10 +21,10 @@ public class UfController {
     UfService ufService;
 
     @PostMapping
-    ResponseEntity<Void> savar(@Valid @RequestBody UfDTO ufDTO) {
-        UfDTO novoUfDTO = ufService.salvar(ufDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigoUf}").buildAndExpand(novoUfDTO.getCodigoUf()).toUri();
-        return ResponseEntity.created(uri).build();
+    ResponseEntity<List<UfDTO>> savar(@Valid @RequestBody UfDTO ufDTO) {
+       ufService.salvar(ufDTO);
+        List<UfDTO> ufsDTORetorno = ufService.buscarTodos();
+        return ResponseEntity.ok().body(ufsDTORetorno);
     }
 
     @GetMapping
@@ -34,32 +34,26 @@ public class UfController {
     }
 
     @PutMapping(value = "/{codigouf}")
-    ResponseEntity<Void> alterar(@Valid @RequestBody UfDTO ufDTO,@PathVariable Integer codigouf) {
+    ResponseEntity<List<UfDTO>> alterar(@Valid @RequestBody UfDTO ufDTO,@PathVariable Integer codigouf) {
         ufService.alterar(ufDTO,codigouf);
-        return ResponseEntity.ok().build();
+        List<UfDTO> ufsDTORetorno = ufService.buscarTodos();
+        return ResponseEntity.ok().body(ufsDTORetorno);
     }
 
-    @GetMapping(value = "nome/{nome}")
-    ResponseEntity<UfDTO> buscarUfPorNome(@PathVariable String nome) {
+    @GetMapping(params = "nome")
+    ResponseEntity<UfDTO> buscarUfPorNome(@RequestParam String nome) {
         UfDTO ufDTO = ufService.buscarPorNome(nome);
         return ResponseEntity.ok().body(ufDTO);
     }
 
-    @GetMapping(value = "sigla/{sigla}")
-    ResponseEntity<UfDTO> buscarUfPorSigla(@PathVariable String sigla) {
+    @GetMapping(params = "sigla")
+    ResponseEntity<UfDTO> buscarUfPorSigla(@RequestParam String sigla) {
         UfDTO ufDTO = ufService.buscarPorSigla(sigla);
         return ResponseEntity.ok().body(ufDTO);
     }
 
-    @PutMapping(value = "status/{codigoUf}")
-    ResponseEntity<Void> alterarStatus(@Valid @PathVariable Integer codigoUf, @RequestBody UfDTO ufDTO) {
-        ufService.alterarStatusUf(codigoUf, ufDTO.getStatus());
-        return ResponseEntity.ok().build();
-
-    }
-
-    @GetMapping(value = "status/{status}")
-    ResponseEntity<List<UfDTO>> buscarUmStatus (@PathVariable Integer status) {
+    @GetMapping(params = "status")
+    ResponseEntity<List<UfDTO>> buscarUmStatus (@RequestParam Integer status) {
         List<UfDTO> ufsDTO = ufService.buscarUmStatus(status);
         return ResponseEntity.ok().body(ufsDTO);
     }
