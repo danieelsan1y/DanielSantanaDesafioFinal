@@ -16,6 +16,6 @@ public interface EnderecoRepository extends JpaRepository<Endereco,Integer> {
     @Query(" SELECT e FROM Endereco e " +
             " INNER JOIN e.pessoa pessoa " +
             " WHERE pessoa.codigoPessoa = :codigoPessoa ")
-    List<Municipio> findAllByCodigoPessoa(@Param("codigoPessoa") Integer codigoPessoa);
+    List<Endereco> findAllByCodigoPessoa(@Param("codigoPessoa") Integer codigoPessoa);
 
 }

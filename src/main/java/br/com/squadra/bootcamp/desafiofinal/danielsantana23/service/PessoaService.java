@@ -3,7 +3,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.EnderecoDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaEnderecoDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarAtrerarDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
@@ -14,6 +14,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.Ser
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class PessoaService {
     @Autowired
     BairroRepository bairroRepository;
 
-    public void salvar(PessoaSalvarDTO pessoaSalvarDTO) {
+    public void salvar(PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
 
         pessoaSalvarDTO.setLogin(pessoaSalvarDTO.getLogin().toLowerCase());
         if (!verficarSeJaExisteNoBancoPorLogin(pessoaSalvarDTO.getLogin())) {
@@ -48,7 +49,7 @@ public class PessoaService {
 
     }
 
-    public void atualizar(PessoaSalvarDTO pessoaSalvarDTO, Integer codigoPessoa) {
+    public void atualizar(PessoaSalvarAtrerarDTO pessoaSalvarDTO, Integer codigoPessoa) {
         Pessoa pessoaAntiga = pessoaRepository.findByCodigoPessoa(codigoPessoa);
         if (verficarSeJaExisteNoBancoPorCodigoPessoa(codigoPessoa)) {
             pessoaAntiga.setSobrenome(pessoaSalvarDTO.getSobrenome().toUpperCase());
@@ -81,8 +82,7 @@ public class PessoaService {
     }
 
     private void atualizarEndereco(Pessoa pessoaAntiga, List<EnderecoDTO> enderecos) {
-        List<Endereco> enderecosCadastrados = null;
-        List<Endereco> enderecosAntigos = enderecoRepository.findAll();
+        List<Endereco> enderecosCadastrados = new ArrayList<>();
         enderecos.stream().map(endereco -> {
             Endereco enderecoAntigo = enderecoRepository.findByCodigoEndereco(endereco.getCodigoEndereco());
             if (enderecoAntigo != null) {
@@ -119,6 +119,14 @@ public class PessoaService {
             }
             return null;
         }).collect(Collectors.toList());
+        List<Endereco> todosEnderecos = enderecoRepository.findAllByCodigoPessoa(pessoaAntiga.getCodigoPessoa());
+        todosEnderecos.removeAll(enderecosCadastrados);
+
+        if(!todosEnderecos.isEmpty()) {
+            enderecoRepository.deleteAll(todosEnderecos);
+        }
+
+
     }
 
     private void salvarEnderecos(Pessoa pessoa, List<EnderecoDTO> enderecos) {

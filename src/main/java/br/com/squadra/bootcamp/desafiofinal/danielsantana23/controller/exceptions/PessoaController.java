@@ -2,7 +2,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller.exceptio
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaEnderecoDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarAtrerarDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class PessoaController {
     PessoaService pessoaService;
 
     @PostMapping
-    ResponseEntity<Void> savar(@Valid @RequestBody PessoaSalvarDTO pessoaSalvarDTO) {
+    ResponseEntity<Void> savar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
         pessoaService.salvar(pessoaSalvarDTO);
         return ResponseEntity.ok().build();
     }
@@ -37,7 +37,7 @@ public class PessoaController {
     }
 
     @PutMapping(value = "/{codigoPessoa}")
-    ResponseEntity<Void> alterar (@RequestBody PessoaSalvarDTO pessoaSalvarDTO,@PathVariable Integer codigoPessoa  ) {
+    ResponseEntity<Void> alterar (@RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO, @PathVariable Integer codigoPessoa  ) {
        pessoaService.atualizar(pessoaSalvarDTO, codigoPessoa);
         return ResponseEntity.ok().build();
 

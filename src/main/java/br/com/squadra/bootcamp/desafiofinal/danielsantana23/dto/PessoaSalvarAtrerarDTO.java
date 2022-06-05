@@ -3,7 +3,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class PessoaSalvarDTO implements Serializable {
+public class PessoaSalvarAtrerarDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoPessoa;
@@ -14,7 +14,7 @@ public class PessoaSalvarDTO implements Serializable {
     private Integer status;
     List<EnderecoDTO> enderecos;
 
-    public PessoaSalvarDTO(String nome, String sobrenome, String login, String senha, Integer status, List<EnderecoDTO> enderecos ) {
+    public PessoaSalvarAtrerarDTO(String nome, String sobrenome, String login, String senha, Integer status, List<EnderecoDTO> enderecos ) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.login = login;
