@@ -82,10 +82,14 @@ public class PessoaService {
     }
 
     private void atualizarEndereco(Pessoa pessoaAntiga, List<EnderecoDTO> enderecos) {
-        List<Endereco> enderecosCadastrados = new ArrayList<>();
+        List<Endereco> todosEnderecos = enderecoRepository.findAllByCodigoPessoa(pessoaAntiga.getCodigoPessoa());
+        List<Endereco> enderecosAtualizados = new ArrayList<>();
+        List<Endereco> enderecosNovos = new ArrayList<>();
         enderecos.stream().map(endereco -> {
-            Endereco enderecoAntigo = enderecoRepository.findByCodigoEndereco(endereco.getCodigoEndereco());
+
+            Endereco enderecoAntigo = enderecoRepository.buscarEnderecoPorPessoaECodigo(pessoaAntiga.getCodigoPessoa(), endereco.getCodigoEndereco());
             if (enderecoAntigo != null) {
+                enderecosAtualizados.add(enderecoAntigo);
                 Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
                 //enderecoAntigo.setStatus(endereco.getStatus());
                 enderecoAntigo.setComplemento(endereco.getComplemento());
@@ -94,12 +98,14 @@ public class PessoaService {
                 enderecoAntigo.setCep(endereco.getCep());
                 enderecoAntigo.setBairro(bairro);
                 enderecoRepository.save(enderecoAntigo);
+
                 return enderecoAntigo;
             } else {
+
                 if (endereco.getCodigoEndereco().equals(0)) {
                     Endereco enderecoNovo = new Endereco();
                     Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
-                    if(bairro != null) {
+                    if (bairro != null) {
                         enderecoNovo.setPessoa(pessoaAntiga);
                         enderecoNovo.setBairro(bairro);
                         enderecoNovo.setStatus(1);
@@ -107,8 +113,7 @@ public class PessoaService {
                         enderecoNovo.setNomeRua(endereco.getNomeRua());
                         enderecoNovo.setCep(endereco.getCep());
                         enderecoNovo.setNumero(endereco.getNumero());
-                        enderecoRepository.save(enderecoNovo);
-                        enderecosCadastrados.add(enderecoNovo);
+                        enderecosNovos.add(enderecoNovo);
                     } else {
                         throw new ServiceException("Bairro com codigoBairro: " + endereco.getCodigoBairro() + ", não esta cadastrado no Banco!");
                     }
@@ -119,12 +124,13 @@ public class PessoaService {
             }
             return null;
         }).collect(Collectors.toList());
-        List<Endereco> todosEnderecos = enderecoRepository.findAllByCodigoPessoa(pessoaAntiga.getCodigoPessoa());
-        todosEnderecos.removeAll(enderecosCadastrados);
 
+        todosEnderecos.removeAll(enderecosAtualizados);
         if(!todosEnderecos.isEmpty()) {
             enderecoRepository.deleteAll(todosEnderecos);
         }
+        enderecoRepository.saveAll(enderecosNovos);
+        System.out.println(todosEnderecos.size());
 
 
     }

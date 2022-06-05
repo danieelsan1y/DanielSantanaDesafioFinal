@@ -3,6 +3,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,5 +18,10 @@ public interface EnderecoRepository extends JpaRepository<Endereco,Integer> {
             " INNER JOIN e.pessoa pessoa " +
             " WHERE pessoa.codigoPessoa = :codigoPessoa ")
     List<Endereco> findAllByCodigoPessoa(@Param("codigoPessoa") Integer codigoPessoa);
+
+    @Query(" SELECT e FROM Endereco e " +
+            "WHERE e.pessoa.codigoPessoa = :codigoPessoa " +
+            "AND e.codigoEndereco = :codigoEndereco ")
+    Endereco buscarEnderecoPorPessoaECodigo (@Param("codigoPessoa") Integer codigoPessoa, Integer codigoEndereco);
 
 }
