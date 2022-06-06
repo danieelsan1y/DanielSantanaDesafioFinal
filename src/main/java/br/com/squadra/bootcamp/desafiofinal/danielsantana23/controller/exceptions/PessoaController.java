@@ -7,7 +7,6 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.PessoaServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -37,11 +36,10 @@ public class PessoaController {
     }
 
     @PutMapping(value = "/{codigoPessoa}")
-    ResponseEntity<Void> alterar (@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO, @PathVariable Integer codigoPessoa  ) {
-       pessoaService.atualizar(pessoaSalvarDTO, codigoPessoa);
+    ResponseEntity<Void> alterar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO, @PathVariable Integer codigoPessoa) {
+        pessoaService.atualizar(pessoaSalvarDTO, codigoPessoa);
         return ResponseEntity.ok().build();
 
     }
-
 
 }

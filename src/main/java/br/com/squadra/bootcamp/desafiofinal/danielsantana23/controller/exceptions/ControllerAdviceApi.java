@@ -16,15 +16,16 @@ public class ControllerAdviceApi {
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<SeviceErro> resourceNotFound(ServiceException e, HttpServletRequest request) {
         String erro = "Recurso não encontrado";
-        HttpStatus status =  HttpStatus.NOT_FOUND;
-        SeviceErro err = new SeviceErro(String.valueOf(status),e.getMessage());
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        SeviceErro err = new SeviceErro(String.valueOf(status), e.getMessage());
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class) public ResponseEntity<SeviceErro> resourceNotFound(ConstraintViolationException e) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<SeviceErro> resourceNotFound(ConstraintViolationException e) {
         String erro = "Campo(s) obrigatório(s) em branco";
-        HttpStatus status =  HttpStatus.NOT_FOUND;
-        SeviceErro err = new SeviceErro(String.valueOf(status),"Campos Obrigatórios em branco");
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        SeviceErro err = new SeviceErro(String.valueOf(status), "Campos Obrigatórios em branco");
         return ResponseEntity.status(status).body(err);
     }
 }

@@ -1,11 +1,7 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
-import java.util.List;
 
 
 public class BairroDTO implements Serializable {
@@ -16,8 +12,6 @@ public class BairroDTO implements Serializable {
     private Integer codigoMunicipio;
     private String nome;
     private Integer status;
-
-
 
 
     public BairroDTO(Bairro bairro) {

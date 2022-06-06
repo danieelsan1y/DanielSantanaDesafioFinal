@@ -5,10 +5,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.BairroServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -42,6 +39,7 @@ public class BairroController {
         List<BairroDTO> bairroDTOS = bairroService.buscarPorCodigoMunicipio(codigoMunicipio);
         return ResponseEntity.ok().body(bairroDTOS);
     }
+
     @GetMapping(params = "status")
     ResponseEntity<List<BairroDTO>> buscarStatus(@RequestParam Integer status) {
         List<BairroDTO> bairroDTOS = bairroService.buscarStatus(status);
@@ -50,7 +48,7 @@ public class BairroController {
 
     @PutMapping(value = "/{codigoBairro}")
     ResponseEntity<List<BairroDTO>> alterar(@Valid @RequestBody BairroDTO bairroDTO, @PathVariable Integer codigoBairro) {
-        bairroService.alterar(bairroDTO,codigoBairro);
+        bairroService.alterar(bairroDTO, codigoBairro);
         List<BairroDTO> bairroDTOS = bairroService.buscarTodos();
         return ResponseEntity.ok().body(bairroDTOS);
     }

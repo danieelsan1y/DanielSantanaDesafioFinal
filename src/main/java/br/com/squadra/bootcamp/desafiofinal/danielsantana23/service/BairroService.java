@@ -8,7 +8,6 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.Municipio
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

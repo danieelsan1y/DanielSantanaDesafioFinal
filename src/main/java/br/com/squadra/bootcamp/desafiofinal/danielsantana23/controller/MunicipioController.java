@@ -5,10 +5,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.MunicipioSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -55,6 +52,5 @@ public class MunicipioController {
         List<MunicipioDTO> municipioDTOS = municipioService.buscarTodos();
         return ResponseEntity.ok().body(municipioDTOS);
     }
-
 
 }

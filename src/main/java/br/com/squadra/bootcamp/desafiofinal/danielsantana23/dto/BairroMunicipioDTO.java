@@ -4,7 +4,6 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 
 import java.io.Serializable;
 
-
 public class BairroMunicipioDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -13,9 +12,7 @@ public class BairroMunicipioDTO implements Serializable {
     private Integer codigoMunicipio;
     private String nome;
     private Integer status;
-private MunicipioUfDTO municipio;
-
-
+    private MunicipioUfDTO municipio;
 
     public BairroMunicipioDTO(Bairro bairro) {
         this.codigoBairro = bairro.getCodigoBairro();
