@@ -24,15 +24,16 @@ public class MunicipioService {
     public void salvar(MunicipioDTO municipioDTO) {
         municipioDTO.setNome(municipioDTO.getNome().toUpperCase());
         if (!verificarSeMunicipioJaExisteNoBancoPorNome(municipioDTO.getNome())) {
-            Integer codigoUf = municipioDTO.getCodigoUf();
-            Uf uf = ufRepository.findByCodigoUf(codigoUf);
+            Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
             Municipio municipio = new Municipio();
             municipio.setNome(municipioDTO.getNome());
             municipio.setStatus(municipioDTO.getStatus());
-            municipio.setUf(uf);
-            uf.getMunicipios().add(municipio);
-            municipioRepository.save(municipio);
-
+            if (uf != null) {
+                municipio.setUf(uf);
+                municipioRepository.save(municipio);
+            } else {
+                throw new ServiceException("UF com o codigoUf: " + municipioDTO.getCodigoUf() + " não está cadastrado no banco!");
+            }
         } else {
             throw new ServiceException("Município " + municipioDTO.getNome() + " já cadastrado no banco!");
         }
@@ -69,18 +70,18 @@ public class MunicipioService {
 
     }
 
-    public void alterar(MunicipioDTO municipioDTO, Integer codigoMunicipio) {
-        if (verficarSeJaExisteNoBancoPorCodigoMunicipio(codigoMunicipio)){
-            Municipio municipioAntigo = municipioRepository.findByCodigoMunicipio(codigoMunicipio);
+    public void alterar(MunicipioDTO municipioDTO) {
+        if (verficarSeJaExisteNoBancoPorCodigoMunicipio(municipioDTO.getCodigoMunicipio())) {
+            Municipio municipioAntigo = municipioRepository.findByCodigoMunicipio((municipioDTO.getCodigoMunicipio()));
             alterarCampos(municipioDTO, municipioAntigo);
             municipioRepository.save(municipioAntigo);
         } else {
-            throw new ServiceException("Município com codigoMunicipio: "+codigoMunicipio+ " não existe no banco");
+            throw new ServiceException("Município com codigoMunicipio: " + municipioDTO.getCodigoMunicipio() + " não existe no banco");
         }
     }
 
-    public List<MunicipioDTO> buscarStatus (Integer status) {
-       List <Municipio> municipios = municipioRepository.findAllStatus(status);
+    public List<MunicipioDTO> buscarStatus(Integer status) {
+        List<Municipio> municipios = municipioRepository.findAllStatus(status);
         List<MunicipioDTO> municipioDTO = municipios.stream().map(municipio -> new MunicipioDTO(municipio)).collect(Collectors.toList());
         return municipioDTO;
     }
@@ -88,10 +89,13 @@ public class MunicipioService {
     private void alterarCampos(MunicipioDTO municipioDTO, Municipio municipioAntigo) {
 
         Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
-        municipioAntigo.setNome(municipioDTO.getNome().toUpperCase());
-        municipioAntigo.setStatus(municipioDTO.getStatus());
-        municipioAntigo.setUf(uf);
-
+        if (uf != null) {
+            municipioAntigo.setNome(municipioDTO.getNome().toUpperCase());
+            municipioAntigo.setStatus(municipioDTO.getStatus());
+            municipioAntigo.setUf(uf);
+        } else {
+            throw new ServiceException("Uf com codigoUf: " + municipioDTO.getCodigoUf() + " não existe no banco");
+        }
 
     }
 

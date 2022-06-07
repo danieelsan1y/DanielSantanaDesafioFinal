@@ -13,7 +13,8 @@ import java.util.List;
 public class Uf implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "uf_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "uf_gerator")
+    @SequenceGenerator(name = "uf_gerator", initialValue = 1, allocationSize = 1, sequenceName = "SEQUENCE_UF")
     @Column(name = "codigo_uf", length = 9)
     private Integer codigoUf;
     @NotEmpty(message = "O campo sigla não pode ser vazio, insira novamente!")

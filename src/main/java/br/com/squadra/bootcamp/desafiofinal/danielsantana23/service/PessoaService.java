@@ -49,9 +49,9 @@ public class PessoaService {
 
     }
 
-    public void atualizar(PessoaSalvarAtrerarDTO pessoaSalvarDTO, Integer codigoPessoa) {
-        Pessoa pessoaAntiga = pessoaRepository.findByCodigoPessoa(codigoPessoa);
-        if (verficarSeJaExisteNoBancoPorCodigoPessoa(codigoPessoa)) {
+    public void atualizar(PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
+        Pessoa pessoaAntiga = pessoaRepository.findByCodigoPessoa(pessoaSalvarDTO.getCodigoPessoa());
+        if (verficarSeJaExisteNoBancoPorCodigoPessoa(pessoaSalvarDTO.getCodigoPessoa())) {
             pessoaAntiga.setSobrenome(pessoaSalvarDTO.getSobrenome().toUpperCase());
             pessoaAntiga.setNome(pessoaSalvarDTO.getNome().toUpperCase());
             pessoaAntiga.setSenha(pessoaSalvarDTO.getSenha());
@@ -60,7 +60,7 @@ public class PessoaService {
             atualizarEndereco(pessoaAntiga, pessoaSalvarDTO.getEnderecosDTO());
             pessoaRepository.save(pessoaAntiga);
         } else {
-            throw new ServiceException("Pessoa com codigoPessoa: " + codigoPessoa + ", não esta cadastrado no Banco!");
+            throw new ServiceException("Pessoa com codigoPessoa: " + pessoaSalvarDTO.getCodigoPessoa() + ", não esta cadastrado no Banco!");
         }
     }
 
@@ -139,15 +139,20 @@ public class PessoaService {
         enderecos.stream().map(endereco -> {
             Endereco novosEnderecos = new Endereco();
             Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
-            novosEnderecos.setBairro(bairro);
-            novosEnderecos.setPessoa(pessoa);
-            novosEnderecos.setCep(endereco.getCep());
-            novosEnderecos.setNomeRua(endereco.getNomeRua());
-            novosEnderecos.setNumero(endereco.getNumero());
-            novosEnderecos.setComplemento(endereco.getComplemento());
-            novosEnderecos.setStatus(1);
-            enderecoRepository.save(novosEnderecos);
-            return novosEnderecos;
+            if(bairro != null) {
+                novosEnderecos.setBairro(bairro);
+                novosEnderecos.setPessoa(pessoa);
+                novosEnderecos.setCep(endereco.getCep());
+                novosEnderecos.setNomeRua(endereco.getNomeRua());
+                novosEnderecos.setNumero(endereco.getNumero());
+                novosEnderecos.setComplemento(endereco.getComplemento());
+                novosEnderecos.setStatus(1);
+                enderecoRepository.save(novosEnderecos);
+                return novosEnderecos;
+            } else {
+                throw new ServiceException("Bairro com codigoBairro: " + endereco.getCodigoBairro() + ", não esta cadastrado no Banco!");
+            }
+
         }).collect(Collectors.toList());
     }
 

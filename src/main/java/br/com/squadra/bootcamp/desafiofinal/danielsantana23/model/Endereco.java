@@ -9,7 +9,8 @@ import java.io.Serializable;
 public class Endereco implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "endereco_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "endereco_gerator")
+    @SequenceGenerator(name = "endereco_gerator", initialValue = 1, allocationSize = 1, sequenceName = "SEQUENCE_ENDERECO")
     @Column(name = "codigo_endereco", length = 9)
     private Integer codigoEndereco;
 

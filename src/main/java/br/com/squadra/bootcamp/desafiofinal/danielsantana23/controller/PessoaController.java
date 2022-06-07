@@ -1,4 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller.exceptions;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaEnderecoDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
@@ -35,9 +35,9 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoaComRelaiconamentoDTO);
     }
 
-    @PutMapping(value = "/{codigoPessoa}")
-    ResponseEntity<Void> alterar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO, @PathVariable Integer codigoPessoa) {
-        pessoaService.atualizar(pessoaSalvarDTO, codigoPessoa);
+    @PutMapping
+    ResponseEntity<Void> alterar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
+        pessoaService.atualizar(pessoaSalvarDTO);
         return ResponseEntity.ok().build();
 
     }

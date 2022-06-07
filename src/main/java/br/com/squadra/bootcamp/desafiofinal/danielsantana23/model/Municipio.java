@@ -15,7 +15,8 @@ public class Municipio implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "municipio_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "municipio_gerator")
+    @SequenceGenerator(name = "municipio_gerator", initialValue = 1, allocationSize = 1, sequenceName = "SEQUENCE_MUNICIPIO")
     @Column(name = "codigo_municipio", length = 9)
     private Integer codigoMunicipio;
 

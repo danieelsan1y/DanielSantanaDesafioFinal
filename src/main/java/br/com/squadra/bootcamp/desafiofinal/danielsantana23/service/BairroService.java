@@ -23,13 +23,16 @@ public class BairroService {
     public void salvar(BairroDTO bairroDTO) {
         bairroDTO.setNome(bairroDTO.getNome().toUpperCase());
         if (!verificarSeBairroJaExisteNoBancoPorNome(bairroDTO.getNome())) {
-            Integer codigoMunicipio = bairroDTO.getCodigoMunicipio();
-            Municipio municipio = municipioRepository.findByCodigoMunicipio(codigoMunicipio);
-            Bairro bairro = new Bairro();
-            bairro.setStatus(bairroDTO.getStatus());
-            bairro.setMunicipio(municipio);
-            bairro.setNome(bairroDTO.getNome());
-            bairroRepository.save(bairro);
+            Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
+            if(municipio != null) {
+                Bairro bairro = new Bairro();
+                bairro.setStatus(bairroDTO.getStatus());
+                bairro.setMunicipio(municipio);
+                bairro.setNome(bairroDTO.getNome());
+                bairroRepository.save(bairro);
+            } else {
+                throw new ServiceException("Municipio com o codigoMunicipi0: " + bairroDTO.getCodigoMunicipio() + " não está cadastrado no banco!");
+            }
 
         } else {
             throw new ServiceException("Bairro " + bairroDTO.getNome() + " já cadastrado no banco!");
@@ -68,13 +71,13 @@ public class BairroService {
         return bairrosDTO;
     }
 
-    public void alterar(BairroDTO bairroDTO, Integer codigoBairro) {
-        if (verificarSeBairroJaExisteNoBancoPorCodigoBairro(codigoBairro)){
-            Bairro bairroAntigo = bairroRepository.findByCodigoBairro(codigoBairro);
+    public void alterar(BairroDTO bairroDTO) {
+        if (verificarSeBairroJaExisteNoBancoPorCodigoBairro(bairroDTO.getCodigoBairro())){
+            Bairro bairroAntigo = bairroRepository.findByCodigoBairro(bairroDTO.getCodigoBairro());
             alterarCampos(bairroDTO, bairroAntigo);
             bairroRepository.save(bairroAntigo);
         } else {
-            throw new ServiceException("Bairro com id: "+codigoBairro+ " não existe no banco");
+            throw new ServiceException("Bairro com codigoBairro: "+bairroDTO.getCodigoBairro()+ " não existe no banco");
         }
     }
 
@@ -89,9 +92,14 @@ public class BairroService {
     private void alterarCampos(BairroDTO bairroDTO, Bairro bairroAntigo) {
 
         Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
-        bairroAntigo.setNome(bairroDTO.getNome().toUpperCase());
-        bairroAntigo.setStatus(bairroDTO.getStatus());
-        bairroAntigo.setMunicipio(municipio);
+        if(municipio != null) {
+            bairroAntigo.setNome(bairroDTO.getNome().toUpperCase());
+            bairroAntigo.setStatus(bairroDTO.getStatus());
+            bairroAntigo.setMunicipio(municipio);
+        } else {
+            throw new ServiceException("Municipio com codigoMunicipio: "+bairroDTO.getCodigoMunicipio()+ " não existe no banco");
+        }
+
 
     }
     private boolean verificarSeBairroJaExisteNoBancoPorCodigoBairro(Integer codigoBairro) {

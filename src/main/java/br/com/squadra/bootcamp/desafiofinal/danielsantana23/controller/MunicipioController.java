@@ -46,9 +46,9 @@ public class MunicipioController {
         return ResponseEntity.ok().body(municipiosDTO);
     }
 
-    @PutMapping(value = "/{codigoMunicipio}")
-    ResponseEntity<List<MunicipioDTO>> alterar(@Valid @RequestBody MunicipioDTO municipioDTO, @PathVariable Integer codigoMunicipio) {
-        municipioService.alterar(municipioDTO, codigoMunicipio);
+    @PutMapping
+    ResponseEntity<List<MunicipioDTO>> alterar(@Valid @RequestBody MunicipioDTO municipioDTO) {
+        municipioService.alterar(municipioDTO);
         List<MunicipioDTO> municipioDTOS = municipioService.buscarTodos();
         return ResponseEntity.ok().body(municipioDTOS);
     }

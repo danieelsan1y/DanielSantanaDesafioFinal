@@ -1,14 +1,20 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.UfSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.UfRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class UfService {
@@ -37,14 +43,14 @@ public class UfService {
         return ufsDTO;
     }
 
-    public void alterar(UfDTO ufDTO, Integer codigoUf) {
-        if(verficarSeJaExisteNoBancoPorCodigoUf(codigoUf)) {
+    public void alterar(UfDTO ufDTO) {
+        if(verficarSeJaExisteNoBancoPorCodigoUf(ufDTO.getCodigoUf())) {
             Uf ufNovo = converterParaUf(ufDTO);
-            Uf ufAntigo = ufRepository.findByCodigoUf(codigoUf);
+            Uf ufAntigo = ufRepository.findByCodigoUf(ufDTO.getCodigoUf());
             alterarCampos(ufNovo, ufAntigo);
             ufRepository.save(ufAntigo);
         } else {
-            throw new ServiceException("Uf com o codigoUf: " + codigoUf + " não esta cadastrado no Banco!");
+            throw new ServiceException("Uf com o codigoUf: " + ufDTO.getCodigoUf() + " não esta cadastrado no Banco!");
         }
 
     }
@@ -80,6 +86,18 @@ public class UfService {
         return ufsDTO;
     }
 
+    public List<UfDTO> buscarPorFiltro(Map<String,String> parametros) {
+        List<UfDTO> ufsDTO = new ArrayList<>();
+        if(parametros == null || parametros.isEmpty()) {
+            return  ufsDTO = ufRepository.findAll().stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
+        }
+
+        Specification<Uf> specification = where(UfSpecification.buscarPorNome(parametros.get("nome"))).
+                and(UfSpecification.buscarPorSigla(parametros.get("sigla")).and(UfSpecification.buscarPorStatus(parametros.get("status"))));
+        List<Uf> ufs = ufRepository.findAll(specification);
+        ufsDTO = ufs.stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
+        return  ufsDTO;
+    }
     private void alterarCampos(Uf ufNovo, Uf ufAntigo) {
         ufAntigo.setSigla(ufNovo.getSigla());
         ufAntigo.setNome(ufNovo.getNome());

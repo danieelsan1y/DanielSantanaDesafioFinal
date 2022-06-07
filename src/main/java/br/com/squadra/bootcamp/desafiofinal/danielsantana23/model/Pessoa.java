@@ -12,7 +12,8 @@ public class Pessoa implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_gerator")
+    @SequenceGenerator(name = "pessoa_gerator", initialValue = 1, allocationSize = 1, sequenceName = "SEQUENCE_PESSOA")
     @Column(name = "codigo_pessoa", length = 9)
     private Integer codigoPessoa;
     //@NotEmpty(message = "O campo nome não pode ser vazio, insira novamente!")

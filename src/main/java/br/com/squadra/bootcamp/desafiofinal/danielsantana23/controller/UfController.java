@@ -1,12 +1,14 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.UfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -22,19 +24,25 @@ public class UfController {
         List<UfDTO> ufsDTORetorno = ufService.buscarTodos();
         return ResponseEntity.ok().body(ufsDTORetorno);
     }
-
+/*
     @GetMapping
     ResponseEntity<List<UfDTO>> buscarTodos () {
         List<UfDTO> ufsDTO = ufService.buscarTodos();
         return ResponseEntity.ok().body(ufsDTO);
     }
-
-    @PutMapping(value = "/{codigouf}")
-    ResponseEntity<List<UfDTO>> alterar(@Valid @RequestBody UfDTO ufDTO,@PathVariable Integer codigouf) {
-        ufService.alterar(ufDTO,codigouf);
+*/
+    @PutMapping
+    ResponseEntity<List<UfDTO>> alterar(@Valid @RequestBody UfDTO ufDTO) {
+        ufService.alterar(ufDTO);
         List<UfDTO> ufsDTORetorno = ufService.buscarTodos();
         return ResponseEntity.ok().body(ufsDTORetorno);
     }
+    @GetMapping
+    ResponseEntity<List<UfDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
+        List<UfDTO> ufsDTO = ufService.buscarPorFiltro(parametros);
+        return ResponseEntity.ok().body(ufsDTO);
+    }
+/*
 
     @GetMapping(params = "nome")
     ResponseEntity<UfDTO> buscarUfPorNome(@RequestParam String nome) {
@@ -53,4 +61,6 @@ public class UfController {
         List<UfDTO> ufsDTO = ufService.buscarUmStatus(status);
         return ResponseEntity.ok().body(ufsDTO);
     }
+    */
+
 }

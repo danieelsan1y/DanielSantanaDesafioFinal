@@ -14,7 +14,8 @@ public class Bairro implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bairro_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bairro_gerator")
+    @SequenceGenerator(name = "bairro_gerator", initialValue = 1, allocationSize = 1, sequenceName = "SEQUENCE_BAIRRO")
     private Integer codigoBairro;
     @ManyToOne
     @JoinColumn(name = "codigo_municipio")
