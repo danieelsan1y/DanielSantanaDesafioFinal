@@ -18,7 +18,7 @@ public class PessoaController {
     PessoaService pessoaService;
 
     @PostMapping
-    ResponseEntity<Void> savar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
+    ResponseEntity<Void> salvar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
         pessoaService.salvar(pessoaSalvarDTO);
         return ResponseEntity.ok().build();
     }
