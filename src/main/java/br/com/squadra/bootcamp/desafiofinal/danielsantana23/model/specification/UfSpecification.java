@@ -19,10 +19,16 @@ public class UfSpecification {
                 criteriaBuilder.equal(root.get(Uf_.SIGLA), sigla);
     }
 
-    public static Specification<Uf> buscarPorStatus(final String status) {
-        return Strings.isBlank(status) ? null
+    public static Specification<Uf> buscarPorStatus(final Integer status) {
+        return status == null ? null
                 : (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get(Uf_.NOME), status);
+                criteriaBuilder.equal(root.get(Uf_.STATUS), status);
+    }
+
+    public static Specification<Uf> buscarPorCodigoUf(final Integer codigoUf) {
+        return codigoUf == null ? null
+                : (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get(Uf_.CODIGO_UF), codigoUf);
     }
 
 }

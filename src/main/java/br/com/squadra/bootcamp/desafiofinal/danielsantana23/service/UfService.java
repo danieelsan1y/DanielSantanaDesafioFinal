@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -29,7 +30,7 @@ public class UfService {
         uf.setNome(ufDTO.getNome());
         converterParaMaiusculo(uf);
 
-        if(!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
+        if (!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
             ufRepository.save(uf);
             UfDTO novoUfDTO = new UfDTO();
         } else {
@@ -44,7 +45,7 @@ public class UfService {
     }
 
     public void alterar(UfDTO ufDTO) {
-        if(verficarSeJaExisteNoBancoPorCodigoUf(ufDTO.getCodigoUf())) {
+        if (verficarSeJaExisteNoBancoPorCodigoUf(ufDTO.getCodigoUf())) {
             Uf ufNovo = converterParaUf(ufDTO);
             Uf ufAntigo = ufRepository.findByCodigoUf(ufDTO.getCodigoUf());
             alterarCampos(ufNovo, ufAntigo);
@@ -55,49 +56,69 @@ public class UfService {
 
     }
 
-    public UfDTO buscarPorNome(String nome) {
-        nome = nome.toUpperCase();
-
-        if(verficarSeJaExisteNoBancoPorNome(nome)) {
-            Uf uf = ufRepository.findByNome(nome);
-            UfDTO ufDTO = new UfDTO(uf);
-            return ufDTO;
-        } else {
-            throw new ServiceException("Uf com o nome: " +nome+ ", não existe no banco");
+    public List<UfDTO> buscarPorFiltro(Map<String, String> parametros) {
+        List<UfDTO> ufsDTO = new ArrayList<>();
+        if (parametros == null || parametros.isEmpty()) {
+            return ufsDTO = ufRepository.findAll().stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
         }
+        Specification<Uf> specification = getUfSpecification(parametros);
 
-    }
-
-    public UfDTO buscarPorSigla(String sigla) {
-        sigla = sigla.toUpperCase();
-        if(verificarSeJaExisteNoBancoPorSigla(sigla)) {
-            Uf uf = ufRepository.findBySigla(sigla);
-            UfDTO ufDTO = new UfDTO(uf);
-            return ufDTO;
-        } else {
-            throw new ServiceException("Uf com a sigla: "+sigla+",não existe no banco");
-        }
-
-    }
-
-    public List<UfDTO> buscarUmStatus(Integer status) {
-        List<Uf> ufs = ufRepository.findAllAtivos(status);
-        List<UfDTO> ufsDTO = ufs.stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
+        List<Uf> ufs = ufRepository.findAll(specification);
+        ufsDTO = ufs.stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
         return ufsDTO;
     }
 
-    public List<UfDTO> buscarPorFiltro(Map<String,String> parametros) {
-        List<UfDTO> ufsDTO = new ArrayList<>();
-        if(parametros == null || parametros.isEmpty()) {
-            return  ufsDTO = ufRepository.findAll().stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
+    private Specification<Uf> getUfSpecification(Map<String, String> parametros) {
+        Specification<Uf> specification = null;
+
+        Integer status = null;
+        Integer codigoUf = null;
+        if (parametros.get("status") != null) {
+            status = Integer.parseInt(parametros.get("status"));
+        }
+        if (parametros.get("codigoUf") != null) {
+            codigoUf = Integer.parseInt(parametros.get("codigoUf"));
         }
 
-        Specification<Uf> specification = where(UfSpecification.buscarPorNome(parametros.get("nome"))).
-                and(UfSpecification.buscarPorSigla(parametros.get("sigla")).and(UfSpecification.buscarPorStatus(parametros.get("status"))));
-        List<Uf> ufs = ufRepository.findAll(specification);
-        ufsDTO = ufs.stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
-        return  ufsDTO;
+        if (parametros.get("status") != null && !parametros.get("status").isEmpty()) {
+            Integer finalCodigoUf = codigoUf;
+            specification = Optional.ofNullable(where(UfSpecification.buscarPorStatus(status)))
+                    .map(spec -> spec.and(UfSpecification.buscarPorSigla(parametros.get("sigla"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorNome(parametros.get("nome"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalCodigoUf)))
+                    .orElse(null);
+        }
+        if (parametros.get("nome") != null && !parametros.get("nome").isEmpty()) {
+            Integer finalStatus = status;
+            Integer finalCodigoUf = codigoUf;
+            specification = Optional.ofNullable(where(UfSpecification.buscarPorNome(parametros.get("nome"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorSigla(parametros.get("sigla"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalStatus)))
+                    .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalCodigoUf)))
+                    .orElse(null);
+        }
+
+        if (parametros.get("sigla") != null && !parametros.get("sigla").isEmpty()) {
+            Integer finalStatus = status;
+            Integer finalCodigoUf = codigoUf;
+            specification = Optional.ofNullable(where(UfSpecification.buscarPorSigla(parametros.get("sigla"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorNome(parametros.get("nome"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalStatus)))
+                    .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalCodigoUf)))
+                    .orElse(null);
+        }
+        if (parametros.get("codigoUf") != null && !parametros.get("codigoUf").isEmpty()) {
+            Integer finalStatus = status;
+            Integer finalCodigoUf = codigoUf;
+            specification = Optional.ofNullable(where(UfSpecification.buscarPorCodigoUf(codigoUf)))
+                    .map(spec -> spec.and(UfSpecification.buscarPorNome(parametros.get("nome"))))
+                    .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalStatus)))
+                    .map(spec -> spec.and(UfSpecification.buscarPorSigla(parametros.get("sigla"))))
+                    .orElse(null);
+        }
+        return specification;
     }
+
     private void alterarCampos(Uf ufNovo, Uf ufAntigo) {
         ufAntigo.setSigla(ufNovo.getSigla());
         ufAntigo.setNome(ufNovo.getNome());
@@ -118,6 +139,7 @@ public class UfService {
             return false;
         }
     }
+
     private boolean verficarSeJaExisteNoBancoPorNome(String nome) {
         Uf ufExistenteNome = ufRepository.findByNome(nome);
         if (ufExistenteNome != null) {
@@ -127,7 +149,7 @@ public class UfService {
         }
     }
 
-    private boolean verificarSeJaExisteNoBancoPorSigla (String sigla) {
+    private boolean verificarSeJaExisteNoBancoPorSigla(String sigla) {
         Uf ufExistenteSigla = ufRepository.findBySigla(sigla);
         if (ufExistenteSigla != null) {
             return true;

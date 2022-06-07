@@ -1,12 +1,14 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.MunicipioDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.MunicipioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/municipio")
@@ -22,34 +24,16 @@ public class MunicipioController {
         return ResponseEntity.ok().body(municipioDTOS);
     }
 
-    @GetMapping
-    ResponseEntity<List<MunicipioDTO>> bucarTodos() {
-        List<MunicipioDTO> municipiosDTO = municipioService.buscarTodos();
-        return ResponseEntity.ok().body(municipiosDTO);
-    }
-
-    @GetMapping(params = "codigoMunicipio")
-    ResponseEntity<MunicipioDTO> buscarPorCodigoMunicipio(@RequestParam Integer codigoMunicipio) {
-        MunicipioDTO municipioDTO = municipioService.buscarPorCodigoMunicipio(codigoMunicipio);
-        return ResponseEntity.ok().body(municipioDTO);
-    }
-
-    @GetMapping(params = "codigoUf")
-    ResponseEntity<List<MunicipioDTO>> buscarPorCodigoUf(@RequestParam Integer codigoUf) {
-        List<MunicipioDTO> municipiosDTO = municipioService.buscarPorCodigoUf(codigoUf);
-        return ResponseEntity.ok().body(municipiosDTO);
-    }
-
-    @GetMapping(params = "status")
-    ResponseEntity<List<MunicipioDTO>> buscarStatus(@RequestParam Integer status) {
-        List<MunicipioDTO> municipiosDTO = municipioService.buscarStatus(status);
-        return ResponseEntity.ok().body(municipiosDTO);
-    }
-
     @PutMapping
     ResponseEntity<List<MunicipioDTO>> alterar(@Valid @RequestBody MunicipioDTO municipioDTO) {
         municipioService.alterar(municipioDTO);
         List<MunicipioDTO> municipioDTOS = municipioService.buscarTodos();
+        return ResponseEntity.ok().body(municipioDTOS);
+    }
+
+    @GetMapping
+    ResponseEntity<List<MunicipioDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
+        List<MunicipioDTO> municipioDTOS = municipioService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(municipioDTOS);
     }
 

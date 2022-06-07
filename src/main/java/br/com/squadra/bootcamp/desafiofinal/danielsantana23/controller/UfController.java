@@ -24,13 +24,6 @@ public class UfController {
         List<UfDTO> ufsDTORetorno = ufService.buscarTodos();
         return ResponseEntity.ok().body(ufsDTORetorno);
     }
-/*
-    @GetMapping
-    ResponseEntity<List<UfDTO>> buscarTodos () {
-        List<UfDTO> ufsDTO = ufService.buscarTodos();
-        return ResponseEntity.ok().body(ufsDTO);
-    }
-*/
     @PutMapping
     ResponseEntity<List<UfDTO>> alterar(@Valid @RequestBody UfDTO ufDTO) {
         ufService.alterar(ufDTO);
@@ -42,25 +35,5 @@ public class UfController {
         List<UfDTO> ufsDTO = ufService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(ufsDTO);
     }
-/*
-
-    @GetMapping(params = "nome")
-    ResponseEntity<UfDTO> buscarUfPorNome(@RequestParam String nome) {
-        UfDTO ufDTO = ufService.buscarPorNome(nome);
-        return ResponseEntity.ok().body(ufDTO);
-    }
-
-    @GetMapping(params = "sigla")
-    ResponseEntity<UfDTO> buscarUfPorSigla(@RequestParam String sigla) {
-        UfDTO ufDTO = ufService.buscarPorSigla(sigla);
-        return ResponseEntity.ok().body(ufDTO);
-    }
-
-    @GetMapping(params = "status")
-    ResponseEntity<List<UfDTO>> buscarUmStatus (@RequestParam Integer status) {
-        List<UfDTO> ufsDTO = ufService.buscarUmStatus(status);
-        return ResponseEntity.ok().body(ufsDTO);
-    }
-    */
 
 }
