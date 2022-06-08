@@ -3,9 +3,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.*;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.MunicipioSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.PessoaSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.BairroRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.EnderecoRepository;
@@ -14,7 +12,6 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.Ser
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,16 +38,19 @@ public class PessoaService {
         if (!verficarSeJaExisteNoBancoPorLogin(pessoaSalvarDTO.getLogin())) {
             Pessoa pessoa = new Pessoa();
             pessoa.setNome(pessoaSalvarDTO.getNome());
-            pessoa.setStatus(pessoaSalvarDTO.getStatus());
-            pessoa.setLogin(pessoaSalvarDTO.getLogin());
-            pessoa.setSenha(pessoaSalvarDTO.getSenha());
-            pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome());
+            if (pessoaSalvarDTO.getStatus() == 1 || pessoaSalvarDTO.getStatus() == 2) {
+                pessoa.setStatus(pessoaSalvarDTO.getStatus());
+                pessoa.setLogin(pessoaSalvarDTO.getLogin());
+                pessoa.setSenha(pessoaSalvarDTO.getSenha());
+                pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome());
+                salvarEnderecos(pessoa, pessoaSalvarDTO.getEnderecosDTO());
+            } else {
+                throw new ServiceException("Valor para status não válido!");
+            }
 
-            salvarEnderecos(pessoa, pessoaSalvarDTO.getEnderecosDTO());
         } else {
             throw new ServiceException("Login " + pessoaSalvarDTO.getLogin() + " já cadastrado no banco!");
         }
-
 
     }
 
@@ -60,10 +60,16 @@ public class PessoaService {
             pessoaAntiga.setSobrenome(pessoaSalvarDTO.getSobrenome().toUpperCase());
             pessoaAntiga.setNome(pessoaSalvarDTO.getNome().toUpperCase());
             pessoaAntiga.setSenha(pessoaSalvarDTO.getSenha());
-            pessoaAntiga.setStatus(pessoaAntiga.getStatus());
-            pessoaAntiga.setLogin(pessoaSalvarDTO.getLogin().toLowerCase());
-            atualizarEndereco(pessoaAntiga, pessoaSalvarDTO.getEnderecosDTO());
-            pessoaRepository.save(pessoaAntiga);
+
+            if(pessoaSalvarDTO.getStatus() == 1 || pessoaSalvarDTO.getStatus() == 2) {
+                pessoaAntiga.setStatus(pessoaSalvarDTO.getStatus());
+                pessoaAntiga.setLogin(pessoaSalvarDTO.getLogin().toLowerCase());
+                atualizarEndereco(pessoaAntiga, pessoaSalvarDTO.getEnderecosDTO());
+                pessoaRepository.save(pessoaAntiga);
+            } else{
+                throw new ServiceException("Valor para status não válido!");
+            }
+
         } else {
             throw new ServiceException("Pessoa com codigoPessoa: " + pessoaSalvarDTO.getCodigoPessoa() + ", não esta cadastrado no Banco!");
         }
@@ -107,7 +113,7 @@ public class PessoaService {
                 return enderecoAntigo;
             } else {
 
-                if (endereco.getCodigoEndereco().equals(0)) {
+                if (endereco.getCodigoEndereco().equals(0) || endereco.getCodigoEndereco() == null) {
                     Endereco enderecoNovo = new Endereco();
                     Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
                     if (bairro != null) {
