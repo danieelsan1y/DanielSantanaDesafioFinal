@@ -3,12 +3,14 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaEnderecoDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarAtrerarDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(value = "/pessoa")
 @RestController
@@ -18,16 +20,11 @@ public class PessoaController {
     PessoaService pessoaService;
 
     @PostMapping
-    ResponseEntity<Void> salvar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
+    ResponseEntity<Void> savar(@Valid @RequestBody PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
         pessoaService.salvar(pessoaSalvarDTO);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    ResponseEntity<List<PessoaDTO>> buscarTodas() {
-        List<PessoaDTO> pessoasDTO = pessoaService.buscarTodas();
-        return ResponseEntity.ok().body(pessoasDTO);
-    }
 
     @GetMapping(params = "codigoPessoa")
     ResponseEntity<PessoaEnderecoDTO> buscarPorCodigoPessoa(@RequestParam Integer codigoPessoa) {
@@ -41,5 +38,11 @@ public class PessoaController {
         return ResponseEntity.ok().build();
 
     }
+    @GetMapping
+    ResponseEntity<List<PessoaDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
+        List<PessoaDTO> pessoaDTOS = pessoaService.buscarPorFiltro(parametros);
+        return ResponseEntity.ok().body(pessoaDTOS);
+    }
+
 
 }

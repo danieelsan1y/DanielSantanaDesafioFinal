@@ -1,9 +1,7 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio_;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf_;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.*;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.jpa.domain.Specification;
 
 public class MunicipioSpecification {
@@ -23,5 +21,10 @@ public class MunicipioSpecification {
         return codigoMunicipio == null ? null
                 : (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get(Municipio_.CODIGO_MUNICIPIO), codigoMunicipio);
+    }
+    public static Specification<Municipio> buscarPorNome(final String nome) {
+        return Strings.isBlank(nome) ? null
+                : (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get(Municipio_.NOME), nome);
     }
 }

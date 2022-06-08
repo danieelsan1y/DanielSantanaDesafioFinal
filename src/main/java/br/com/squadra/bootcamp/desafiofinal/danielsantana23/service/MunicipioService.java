@@ -1,16 +1,13 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.MunicipioDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.MunicipioSpecification;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.UfSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.MunicipioRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.UfRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +75,7 @@ public class MunicipioService {
         }
 
     }
+
     public List<MunicipioDTO> buscarPorFiltro(Map<String, String> parametros) {
         List<MunicipioDTO> municipioDTOS = new ArrayList<>();
         if (parametros == null || parametros.isEmpty()) {
@@ -89,12 +87,13 @@ public class MunicipioService {
         municipioDTOS = municipios.stream().map(municipio -> new MunicipioDTO(municipio)).collect(Collectors.toList());
         return municipioDTOS;
     }
+
     private Specification<Municipio> getMunicipioSpecification(Map<String, String> parametros) {
 
         Specification<Municipio> specification = null;
         Integer status = null;
         Integer codigoUf = null;
-        Integer codigoMunicipio =null;
+        Integer codigoMunicipio = null;
         if (parametros.get("status") != null) {
             status = Integer.parseInt(parametros.get("status"));
         }
@@ -110,7 +109,8 @@ public class MunicipioService {
             Integer finalCodigoMunicipio = codigoMunicipio;
             specification = Optional.ofNullable(where(MunicipioSpecification.buscarPorStatus(status)))
                     .map(spec -> spec.and(MunicipioSpecification.buscarPorCodigoMunicipio(finalCodigoMunicipio))).
-                    map(spec ->spec.and(MunicipioSpecification.buscarPorCodigoUf(finalCodigoUf)))
+                    map(spec -> spec.and(MunicipioSpecification.buscarPorCodigoUf(finalCodigoUf)))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorNome(parametros.get("nome"))))
                     .orElse(null);
         }
         if (parametros.get("codigoMunicipio") != null && !parametros.get("codigoMunicipio").isEmpty()) {
@@ -118,8 +118,9 @@ public class MunicipioService {
             Integer finalCodigoMunicipio = codigoMunicipio;
             Integer finalStatus = status;
             specification = Optional.ofNullable(where(MunicipioSpecification.buscarPorCodigoMunicipio(codigoMunicipio)))
-                    .map(spec -> spec.and(MunicipioSpecification.buscarPorStatus(finalStatus))).
-                    map(spec ->spec.and(MunicipioSpecification.buscarPorCodigoUf(finalCodigoUf)))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorStatus(finalStatus)))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorCodigoUf(finalCodigoUf)))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorNome(parametros.get("nome"))))
                     .orElse(null);
         }
         if (parametros.get("codigoUf") != null && !parametros.get("codigoUf").isEmpty()) {
@@ -128,11 +129,25 @@ public class MunicipioService {
             Integer finalStatus = status;
             specification = Optional.ofNullable(where(MunicipioSpecification.buscarPorCodigoUf(codigoUf)))
                     .map(spec -> spec.and(MunicipioSpecification.buscarPorStatus(finalStatus))).
-                    map(spec ->spec.and(MunicipioSpecification.buscarPorCodigoMunicipio(finalCodigoMunicipio)))
+                    map(spec -> spec.and(MunicipioSpecification.buscarPorCodigoMunicipio(finalCodigoMunicipio)))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorNome(parametros.get("nome"))))
+                    .orElse(null);
+        }
+
+        if (parametros.get("nome") != null && !parametros.get("nome").isEmpty()) {
+            Integer finalCodigoUf = codigoUf;
+            Integer finalCodigoMunicipio = codigoMunicipio;
+            Integer finalStatus = status;
+            specification = Optional.ofNullable(where(MunicipioSpecification.buscarPorNome(parametros.get("nome"))))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorStatus(finalStatus))).
+                    map(spec -> spec.and(MunicipioSpecification.buscarPorCodigoMunicipio(finalCodigoMunicipio)))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorNome(parametros.get("nome"))))
+                    .map(spec -> spec.and(MunicipioSpecification.buscarPorCodigoUf(finalCodigoUf)))
                     .orElse(null);
         }
         return specification;
     }
+
     private boolean verficarSeJaExisteNoBancoPorCodigoUf(Integer codigoUf) {
         List<Municipio> municipioExistenteCodigoUf = municipioRepository.findAllByCodigoUf(codigoUf);
         if (municipioExistenteCodigoUf != null) {

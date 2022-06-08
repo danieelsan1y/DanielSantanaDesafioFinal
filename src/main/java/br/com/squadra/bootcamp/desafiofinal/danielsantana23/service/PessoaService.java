@@ -1,22 +1,27 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.EnderecoDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaEnderecoDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.PessoaSalvarAtrerarDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.*;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.MunicipioSpecification;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.PessoaSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.BairroRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.EnderecoRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.PessoaRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class PessoaService {
@@ -126,7 +131,7 @@ public class PessoaService {
         }).collect(Collectors.toList());
 
         todosEnderecos.removeAll(enderecosAtualizados);
-        if(!todosEnderecos.isEmpty()) {
+        if (!todosEnderecos.isEmpty()) {
             enderecoRepository.deleteAll(todosEnderecos);
         }
         enderecoRepository.saveAll(enderecosNovos);
@@ -139,7 +144,7 @@ public class PessoaService {
         enderecos.stream().map(endereco -> {
             Endereco novosEnderecos = new Endereco();
             Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
-            if(bairro != null) {
+            if (bairro != null) {
                 novosEnderecos.setBairro(bairro);
                 novosEnderecos.setPessoa(pessoa);
                 novosEnderecos.setCep(endereco.getCep());
@@ -155,7 +160,47 @@ public class PessoaService {
 
         }).collect(Collectors.toList());
     }
+    public List<PessoaDTO> buscarPorFiltro(Map<String, String> parametros) {
+        List<PessoaDTO> pessoaDTOS = new ArrayList<>();
+        if (parametros == null || parametros.isEmpty()) {
+            return pessoaDTOS = pessoaRepository.findAll().stream().map(pessoa -> new PessoaDTO(pessoa)).collect(Collectors.toList());
+        }
+        Specification<Pessoa> specification = getMunicipioSpecification(parametros);
 
+        List<Pessoa> pessoas = pessoaRepository.findAll(specification);
+        pessoaDTOS = pessoas.stream().map(pessoa -> new PessoaDTO(pessoa)).collect(Collectors.toList());
+        return pessoaDTOS;
+    }
+
+    private Specification<Pessoa> getMunicipioSpecification(Map<String, String> parametros) {
+
+        Specification<Pessoa> specification = null;
+        Integer status = null;
+        Integer codigoPessoa = null;
+        if (parametros.get("status") != null) {
+            status = Integer.parseInt(parametros.get("status"));
+        }
+        if (parametros.get("codigoPessoa") != null) {
+            codigoPessoa = Integer.parseInt(parametros.get("codigoPessoa"));
+        }
+
+        if (parametros.get("status") != null && !parametros.get("status").isEmpty()) {
+            Integer finalCodigoPessoa = codigoPessoa;
+            specification = Optional.ofNullable(where(PessoaSpecification.buscarPorStatus(status)))
+                    .map(spec -> spec.and(PessoaSpecification.buscarPorLogin(parametros.get("login"))))
+                    .orElse(null);
+        }
+
+        if (parametros.get("login") != null && !parametros.get("login").isEmpty()) {
+            Integer finalCodigoPessoa = codigoPessoa;
+            Integer finalStatus = status;
+            specification = Optional.ofNullable(where(PessoaSpecification.buscarPorLogin(parametros.get("login"))))
+                    .map(spec -> spec.and(PessoaSpecification.buscarPorStatus(finalStatus)))
+                    .orElse(null);
+        }
+
+        return specification;
+    }
 
     private boolean verficarSeJaExisteNoBancoPorLogin(String login) {
         Pessoa PessoaExistenteLogin = pessoaRepository.findByLogin(login);
