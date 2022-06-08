@@ -45,7 +45,7 @@ public class PessoaService {
             pessoa.setLogin(pessoaSalvarDTO.getLogin());
             pessoa.setSenha(pessoaSalvarDTO.getSenha());
             pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome());
-            pessoaRepository.save(pessoa);
+
             salvarEnderecos(pessoa, pessoaSalvarDTO.getEnderecosDTO());
         } else {
             throw new ServiceException("Login " + pessoaSalvarDTO.getLogin() + " já cadastrado no banco!");
@@ -145,6 +145,7 @@ public class PessoaService {
             Endereco novosEnderecos = new Endereco();
             Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
             if (bairro != null) {
+                pessoaRepository.save(pessoa);
                 novosEnderecos.setBairro(bairro);
                 novosEnderecos.setPessoa(pessoa);
                 novosEnderecos.setCep(endereco.getCep());
@@ -160,6 +161,7 @@ public class PessoaService {
 
         }).collect(Collectors.toList());
     }
+
     public List<PessoaDTO> buscarPorFiltro(Map<String, String> parametros) {
         List<PessoaDTO> pessoaDTOS = new ArrayList<>();
         if (parametros == null || parametros.isEmpty()) {
@@ -187,7 +189,8 @@ public class PessoaService {
         if (parametros.get("status") != null && !parametros.get("status").isEmpty()) {
             Integer finalCodigoPessoa = codigoPessoa;
             specification = Optional.ofNullable(where(PessoaSpecification.buscarPorStatus(status)))
-                    .map(spec -> spec.and(PessoaSpecification.buscarPorLogin(parametros.get("login"))))
+                    .map(spec -> spec.and(PessoaSpecification.buscarPorLogin(parametros.get("login")))).
+                    map(spec -> spec.and(PessoaSpecification.buscarPorCodigoPessoa(finalCodigoPessoa)))
                     .orElse(null);
         }
 
@@ -195,12 +198,14 @@ public class PessoaService {
             Integer finalCodigoPessoa = codigoPessoa;
             Integer finalStatus = status;
             specification = Optional.ofNullable(where(PessoaSpecification.buscarPorLogin(parametros.get("login"))))
-                    .map(spec -> spec.and(PessoaSpecification.buscarPorStatus(finalStatus)))
+                    .map(spec -> spec.and(PessoaSpecification.buscarPorStatus(finalStatus))).
+                    map(spec -> spec.and(PessoaSpecification.buscarPorCodigoPessoa(finalCodigoPessoa)))
                     .orElse(null);
         }
 
         return specification;
     }
+
 
     private boolean verficarSeJaExisteNoBancoPorLogin(String login) {
         Pessoa PessoaExistenteLogin = pessoaRepository.findByLogin(login);

@@ -22,4 +22,9 @@ public class PessoaSpecification {
                 criteriaBuilder.equal(root.get(Pessoa_.STATUS), status);
     }
 
+    public static Specification<Pessoa> buscarPorCodigoPessoa(final Integer codigoPessoa) {
+        return codigoPessoa == null ? null
+                : (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get(Pessoa_.CODIGO_PESSOA), codigoPessoa);
+    }
 }

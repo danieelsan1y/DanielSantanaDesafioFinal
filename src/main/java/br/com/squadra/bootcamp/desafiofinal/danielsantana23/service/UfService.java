@@ -25,17 +25,22 @@ public class UfService {
 
     public void salvar(UfDTO ufDTO) {
         Uf uf = new Uf();
-        uf.setStatus(ufDTO.getStatus());
-        uf.setSigla(ufDTO.getSigla());
-        uf.setNome(ufDTO.getNome());
-        converterParaMaiusculo(uf);
+        if(!(ufDTO.getSigla().length() > 3) ) {
+            uf.setStatus(ufDTO.getStatus());
+            uf.setSigla(ufDTO.getSigla());
+            uf.setNome(ufDTO.getNome());
+            converterParaMaiusculo(uf);
 
-        if (!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
-            ufRepository.save(uf);
-            UfDTO novoUfDTO = new UfDTO();
+            if (!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
+                ufRepository.save(uf);
+                UfDTO novoUfDTO = new UfDTO();
+            } else {
+                throw new ServiceException("Uf já cadastrado no banco!");
+            }
         } else {
-            throw new ServiceException("Uf já cadastrado no banco!");
+            throw new ServiceException("Tamanho de sigla não permitido!");
         }
+
     }
 
     public List<UfDTO> buscarTodos() {
@@ -120,10 +125,15 @@ public class UfService {
     }
 
     private void alterarCampos(Uf ufNovo, Uf ufAntigo) {
-        ufAntigo.setSigla(ufNovo.getSigla());
-        ufAntigo.setNome(ufNovo.getNome());
-        ufAntigo.setStatus(ufNovo.getStatus());
-        converterParaMaiusculo(ufAntigo);
+        if(!(ufAntigo.getSigla().length()>3)) {
+            ufAntigo.setSigla(ufNovo.getSigla());
+            ufAntigo.setNome(ufNovo.getNome());
+            ufAntigo.setStatus(ufNovo.getStatus());
+            converterParaMaiusculo(ufAntigo);
+        }
+        else {
+            throw new ServiceException("Tamanho de sigla não permitido!");
+        }
     }
 
     private void converterParaMaiusculo(Uf uf) {
