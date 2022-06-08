@@ -24,26 +24,6 @@ public class BairroController {
         return ResponseEntity.ok().body(bairroDTOS);
     }
 
-/*
-    @GetMapping(params = "codigoBairro")
-    ResponseEntity<BairroDTO> buscarPorCodigoBairro(@RequestParam Integer codigoBairro) {
-        BairroDTO bairroDTO = bairroService.buscarPorCodigoBairro(codigoBairro);
-        return ResponseEntity.ok().body(bairroDTO);
-    }
-
-    @GetMapping(params = "codigoMunicipio")
-    ResponseEntity<List<BairroDTO>> buscarPorCodigoMunicipio(@RequestParam Integer codigoMunicipio) {
-        List<BairroDTO> bairroDTOS = bairroService.buscarPorCodigoMunicipio(codigoMunicipio);
-        return ResponseEntity.ok().body(bairroDTOS);
-    }
-
-    @GetMapping(params = "status")
-    ResponseEntity<List<BairroDTO>> buscarStatus(@RequestParam Integer status) {
-        List<BairroDTO> bairroDTOS = bairroService.buscarStatus(status);
-        return ResponseEntity.ok().body(bairroDTOS);
-    }
-*/
-
     @GetMapping
     ResponseEntity<List<BairroDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
         List<BairroDTO> bairroDTOS = bairroService.buscarPorFiltro(parametros);

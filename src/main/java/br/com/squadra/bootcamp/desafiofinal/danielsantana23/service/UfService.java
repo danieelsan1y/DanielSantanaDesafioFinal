@@ -26,17 +26,22 @@ public class UfService {
     public void salvar(UfDTO ufDTO) {
         Uf uf = new Uf();
         if(!(ufDTO.getSigla().length() > 3) ) {
-            uf.setStatus(ufDTO.getStatus());
-            uf.setSigla(ufDTO.getSigla());
-            uf.setNome(ufDTO.getNome());
-            converterParaMaiusculo(uf);
 
-            if (!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
-                ufRepository.save(uf);
-                UfDTO novoUfDTO = new UfDTO();
-            } else {
-                throw new ServiceException("Uf já cadastrado no banco!");
+            if(ufDTO.getStatus() == 1 || ufDTO.getStatus() == 2) {
+                uf.setStatus(ufDTO.getStatus());
+                uf.setSigla(ufDTO.getSigla());
+                uf.setNome(ufDTO.getNome());
+                converterParaMaiusculo(uf);
+                if (!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
+                    ufRepository.save(uf);
+                    UfDTO novoUfDTO = new UfDTO();
+                } else {
+                    throw new ServiceException("Uf já cadastrado no banco!");
+                }
+            } else{
+                throw new ServiceException("Valor para status não válido!");
             }
+
         } else {
             throw new ServiceException("Tamanho de sigla não permitido!");
         }
@@ -128,8 +133,12 @@ public class UfService {
         if(!(ufAntigo.getSigla().length()>3)) {
             ufAntigo.setSigla(ufNovo.getSigla());
             ufAntigo.setNome(ufNovo.getNome());
-            ufAntigo.setStatus(ufNovo.getStatus());
-            converterParaMaiusculo(ufAntigo);
+            if(ufAntigo.getStatus() == 1 || ufAntigo.getStatus() == 2) {
+                ufAntigo.setStatus(ufNovo.getStatus());
+                converterParaMaiusculo(ufAntigo);
+            } else{
+                throw new ServiceException("Valor para status não válido!");
+            }
         }
         else {
             throw new ServiceException("Tamanho de sigla não permitido!");

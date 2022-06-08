@@ -35,10 +35,15 @@ public class BairroService {
             Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
             if (municipio != null) {
                 Bairro bairro = new Bairro();
-                bairro.setStatus(bairroDTO.getStatus());
-                bairro.setMunicipio(municipio);
-                bairro.setNome(bairroDTO.getNome());
-                bairroRepository.save(bairro);
+                if(bairroDTO.getStatus() == 1 || bairroDTO.getStatus() == 2) {
+                    bairro.setStatus(bairroDTO.getStatus());
+                    bairro.setMunicipio(municipio);
+                    bairro.setNome(bairroDTO.getNome());
+                    bairroRepository.save(bairro);
+                } else{
+                    throw new ServiceException("Valor para status não válido!");
+                }
+
             } else {
                 throw new ServiceException("Municipio com o codigoMunicipi0: " + bairroDTO.getCodigoMunicipio() + " não está cadastrado no banco!");
             }
@@ -177,8 +182,13 @@ public class BairroService {
         Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
         if (municipio != null) {
             bairroAntigo.setNome(bairroDTO.getNome().toUpperCase());
-            bairroAntigo.setStatus(bairroDTO.getStatus());
-            bairroAntigo.setMunicipio(municipio);
+            if(bairroDTO.getStatus() == 1 || bairroDTO.getStatus() == 2) {
+                bairroAntigo.setStatus(bairroDTO.getStatus());
+                bairroAntigo.setMunicipio(municipio);
+            } else{
+                throw new ServiceException("Valor para status não válido!");
+            }
+
         } else {
             throw new ServiceException("Municipio com codigoMunicipio: " + bairroDTO.getCodigoMunicipio() + " não existe no banco");
         }

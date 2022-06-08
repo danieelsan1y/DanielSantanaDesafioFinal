@@ -34,13 +34,18 @@ public class MunicipioService {
             Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
             Municipio municipio = new Municipio();
             municipio.setNome(municipioDTO.getNome());
-            municipio.setStatus(municipioDTO.getStatus());
-            if (uf != null) {
-                municipio.setUf(uf);
-                municipioRepository.save(municipio);
-            } else {
-                throw new ServiceException("UF com o codigoUf: " + municipioDTO.getCodigoUf() + " não está cadastrado no banco!");
+            if(municipioDTO.getStatus() == 1 || municipioDTO.getStatus() == 2) {
+                municipio.setStatus(municipioDTO.getStatus());
+                if (uf != null) {
+                    municipio.setUf(uf);
+                    municipioRepository.save(municipio);
+                } else {
+                    throw new ServiceException("UF com o codigoUf: " + municipioDTO.getCodigoUf() + " não está cadastrado no banco!");
+                }
+            } else{
+                throw new ServiceException("Valor para status não válido!");
             }
+
         } else {
             throw new ServiceException("Município " + municipioDTO.getNome() + " já cadastrado no banco!");
         }
@@ -68,8 +73,14 @@ public class MunicipioService {
         Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
         if (uf != null) {
             municipioAntigo.setNome(municipioDTO.getNome().toUpperCase());
-            municipioAntigo.setStatus(municipioDTO.getStatus());
-            municipioAntigo.setUf(uf);
+
+            if(municipioDTO.getStatus() == 1 || municipioDTO.getStatus() == 2) {
+                municipioAntigo.setStatus(municipioDTO.getStatus());
+                municipioAntigo.setUf(uf);
+            } else{
+                throw new ServiceException("Valor para status não válido!");
+            }
+
         } else {
             throw new ServiceException("Uf com codigoUf: " + municipioDTO.getCodigoUf() + " não existe no banco");
         }
