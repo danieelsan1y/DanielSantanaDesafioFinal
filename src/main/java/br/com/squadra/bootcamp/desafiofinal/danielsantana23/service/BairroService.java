@@ -1,6 +1,8 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.BairroDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.MunicipioDTO;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Bairro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Municipio;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Pessoa;
@@ -64,7 +66,7 @@ public class BairroService {
         }
     }
 
-    public List<BairroDTO> buscarPorFiltro(Map<String, String> parametros) {
+    public Object buscarPorFiltro(Map<String, String> parametros) {
         List<BairroDTO> bairroDTOS = new ArrayList<>();
         if (parametros == null || parametros.isEmpty()) {
             return bairroDTOS = bairroRepository.findAll().stream().map(bairro -> new BairroDTO(bairro)).collect(Collectors.toList());
@@ -73,7 +75,16 @@ public class BairroService {
 
         List<Bairro> bairros = bairroRepository.findAll(specification);
         bairroDTOS = bairros.stream().map(bairro -> new BairroDTO(bairro)).collect(Collectors.toList());
-        return bairroDTOS;
+
+        if (parametros.get("codigoBairro") != null && bairroDTOS.size() != 0) {
+            return bairroDTOS.stream().findFirst().get();
+        } else {
+            if (bairroDTOS.size() != 0) {
+                return bairroDTOS;
+            }
+            return new ArrayList<>();
+        }
+
     }
 
     private Specification<Bairro> getBairroSpecification(Map<String, String> parametros) {
@@ -160,8 +171,6 @@ public class BairroService {
         } else {
             throw new ServiceException("Municipio com codigoMunicipio: " + bairroDTO.getCodigoMunicipio() + " não existe no banco");
         }
-
-
     }
 
     private boolean verificarSeBairroJaExisteNoBancoPorCodigoBairro(Integer codigoBairro) {

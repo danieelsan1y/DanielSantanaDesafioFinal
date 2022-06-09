@@ -25,12 +25,6 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoas);
     }
 
-    @GetMapping(params = "codigoPessoa")
-    ResponseEntity<PessoaEnderecoDTO> buscarPorCodigoPessoa(@RequestParam Integer codigoPessoa) {
-        PessoaEnderecoDTO pessoaComRelaiconamentoDTO = pessoaService.buscarPessoaPorCodigoPessoa(codigoPessoa);
-        return ResponseEntity.ok().body(pessoaComRelaiconamentoDTO);
-    }
-
     @PutMapping
     ResponseEntity<List<PessoaDTO>> alterar(@Valid @RequestBody PessoaSalvarAlterarDTO pessoaSalvarDTO) {
         pessoaService.atualizar(pessoaSalvarDTO);
@@ -38,8 +32,8 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoas);
     }
     @GetMapping
-    ResponseEntity<List<PessoaDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
-        List<PessoaDTO> pessoaDTOS = pessoaService.buscarPorFiltro(parametros);
+    ResponseEntity<Object> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
+        Object pessoaDTOS = pessoaService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(pessoaDTOS);
     }
 }

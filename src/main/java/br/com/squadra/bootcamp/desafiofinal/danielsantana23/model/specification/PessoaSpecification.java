@@ -1,7 +1,7 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Pessoa;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa_;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Pessoa_;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.jpa.domain.Specification;
 

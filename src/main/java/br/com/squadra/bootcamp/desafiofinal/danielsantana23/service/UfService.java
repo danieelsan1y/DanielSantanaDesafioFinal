@@ -70,7 +70,7 @@ public class UfService {
 
     }
 
-    public List<UfDTO> buscarPorFiltro(Map<String, String> parametros) {
+    public Object buscarPorFiltro(Map<String, String> parametros) {
         List<UfDTO> ufsDTO = new ArrayList<>();
         if (parametros == null || parametros.isEmpty()) {
             return ufsDTO = ufRepository.findAll().stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
@@ -79,7 +79,17 @@ public class UfService {
 
         List<Uf> ufs = ufRepository.findAll(specification);
         ufsDTO = ufs.stream().map(uf -> new UfDTO(uf)).collect(Collectors.toList());
-        return ufsDTO;
+
+        if (parametros.size() == 1 && parametros.get("status") != null) {
+            return ufsDTO;
+        } else {
+            if (ufsDTO.size() != 0) {
+                return ufsDTO.stream().findFirst().get();
+            }
+            return new ArrayList<>();
+        }
+
+
     }
 
     private Specification<Uf> getUfSpecification(Map<String, String> parametros) {
@@ -134,9 +144,9 @@ public class UfService {
     }
 
     private void alterarCampos(Uf ufNovo, Uf ufAntigo) {
-        if(!verficarSeJaExisteNoBancoPorNome(ufNovo.getNome().toUpperCase()) || ufNovo.getNome().toUpperCase().equals(ufAntigo.getNome())){
+        if (!verficarSeJaExisteNoBancoPorNome(ufNovo.getNome().toUpperCase()) || ufNovo.getNome().toUpperCase().equals(ufAntigo.getNome())) {
             if (!(ufAntigo.getSigla().length() > 3)) {
-                if(!verificarSeJaExisteNoBancoPorSigla(ufNovo.getSigla().toUpperCase()) || ufNovo.getSigla().toUpperCase().equals(ufAntigo.getSigla())) {
+                if (!verificarSeJaExisteNoBancoPorSigla(ufNovo.getSigla().toUpperCase()) || ufNovo.getSigla().toUpperCase().equals(ufAntigo.getSigla())) {
                     ufAntigo.setSigla(ufNovo.getSigla());
                     ufAntigo.setNome(ufNovo.getNome());
                     if (ufNovo.getStatus() == 1 || ufNovo.getStatus() == 2) {
@@ -146,7 +156,7 @@ public class UfService {
                         throw new ServiceException("Valor para status não válido!");
                     }
                 } else {
-                    throw  new ServiceException("Sigla já existe no banco");
+                    throw new ServiceException("Sigla já existe no banco");
                 }
 
             } else {

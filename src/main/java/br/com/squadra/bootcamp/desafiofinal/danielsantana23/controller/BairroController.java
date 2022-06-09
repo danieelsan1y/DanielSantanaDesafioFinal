@@ -24,8 +24,8 @@ public class BairroController {
     }
 
     @GetMapping
-    ResponseEntity<List<BairroDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
-        List<BairroDTO> bairroDTOS = bairroService.buscarPorFiltro(parametros);
+    ResponseEntity<Object> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
+        Object bairroDTOS = bairroService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(bairroDTOS);
     }
 

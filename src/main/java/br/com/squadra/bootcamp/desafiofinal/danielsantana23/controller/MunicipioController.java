@@ -5,6 +5,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.MunicipioSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,8 @@ public class MunicipioController {
     }
 
     @GetMapping
-    ResponseEntity<List<MunicipioDTO>> buscarPorFiltro (@RequestParam Map<String,String> parametros) {
-        List<MunicipioDTO> municipioDTOS = municipioService.buscarPorFiltro(parametros);
+    ResponseEntity<Object> buscarPorFiltro(@RequestParam Map<String, String> parametros) {
+        Object municipioDTOS = municipioService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(municipioDTOS);
     }
 }

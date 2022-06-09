@@ -60,9 +60,9 @@ public class MunicipioService {
 
     public void alterar(MunicipioDTO municipioDTO) {
         if (verficarSeJaExisteNoBancoPorCodigoMunicipio(municipioDTO.getCodigoMunicipio())) {
-                Municipio municipioAntigo = municipioRepository.findByCodigoMunicipio((municipioDTO.getCodigoMunicipio()));
-                alterarCampos(municipioDTO, municipioAntigo);
-                municipioRepository.save(municipioAntigo);
+            Municipio municipioAntigo = municipioRepository.findByCodigoMunicipio((municipioDTO.getCodigoMunicipio()));
+            alterarCampos(municipioDTO, municipioAntigo);
+            municipioRepository.save(municipioAntigo);
         } else {
             throw new ServiceException("Município com codigoMunicipio: " + municipioDTO.getCodigoMunicipio() + " não existe no banco");
         }
@@ -89,7 +89,7 @@ public class MunicipioService {
         }
     }
 
-    public List<MunicipioDTO> buscarPorFiltro(Map<String, String> parametros) {
+    public Object buscarPorFiltro(Map<String, String> parametros) {
         List<MunicipioDTO> municipioDTOS = new ArrayList<>();
         if (parametros == null || parametros.isEmpty()) {
             return municipioDTOS = municipioRepository.findAll().stream().map(municipio -> new MunicipioDTO(municipio)).collect(Collectors.toList());
@@ -98,7 +98,14 @@ public class MunicipioService {
 
         List<Municipio> municipios = municipioRepository.findAll(specification);
         municipioDTOS = municipios.stream().map(municipio -> new MunicipioDTO(municipio)).collect(Collectors.toList());
-        return municipioDTOS;
+        if (parametros.get("codigoMunicipio") != null && municipioDTOS.size() != 0) {
+            return municipioDTOS.stream().findFirst().get();
+        } else {
+            if (municipioDTOS.size() != 0) {
+                return municipioDTOS;
+            }
+            return new ArrayList<>();
+        }
     }
 
     private Specification<Municipio> getMunicipioSpecification(Map<String, String> parametros) {

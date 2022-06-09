@@ -88,7 +88,7 @@ public class PessoaService {
             PessoaEnderecoDTO pessoaRelacionamentoDTO = new PessoaEnderecoDTO(pessoa);
             return pessoaRelacionamentoDTO;
         } else {
-            throw new ServiceException("Não existe pessoa com codigoPessoa: "+codigoPessoa);
+            throw new ServiceException("Não existe pessoa com codigoPessoa: " + codigoPessoa);
         }
     }
 
@@ -140,13 +140,12 @@ public class PessoaService {
             enderecoRepository.deleteAll(todosEnderecos);
         }
         enderecoRepository.saveAll(enderecosNovos);
-        System.out.println(todosEnderecos.size());
 
 
     }
 
     private void salvarEnderecos(Pessoa pessoa, List<EnderecoDTO> enderecos) {
-        if(!enderecos.isEmpty()) {
+        if (!enderecos.isEmpty()) {
             enderecos.stream().map(endereco -> {
                 Endereco novosEnderecos = new Endereco();
                 Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
@@ -159,7 +158,7 @@ public class PessoaService {
                     novosEnderecos.setNumero(endereco.getNumero());
                     novosEnderecos.setComplemento(endereco.getComplemento());
                     novosEnderecos.setStatus(1);
-                        enderecoRepository.save(novosEnderecos);
+                    enderecoRepository.save(novosEnderecos);
                     return novosEnderecos;
                 } else {
                     throw new ServiceException("Bairro com codigoBairro: " + endereco.getCodigoBairro() + ", não esta cadastrado no Banco!");
@@ -171,8 +170,10 @@ public class PessoaService {
         }
     }
 
-    public List<PessoaDTO> buscarPorFiltro(Map<String, String> parametros) {
+    public Object buscarPorFiltro(Map<String, String> parametros) {
+        String validacaoCaracter = new String();
         List<PessoaDTO> pessoaDTOS = new ArrayList<>();
+        List<PessoaEnderecoDTO> pessoaEnderecoDTOS = new ArrayList<>();
         if (parametros == null || parametros.isEmpty()) {
             return pessoaDTOS = pessoaRepository.findAll().stream().map(pessoa -> new PessoaDTO(pessoa)).collect(Collectors.toList());
         }
@@ -180,7 +181,15 @@ public class PessoaService {
 
         List<Pessoa> pessoas = pessoaRepository.findAll(specification);
         pessoaDTOS = pessoas.stream().map(pessoa -> new PessoaDTO(pessoa)).collect(Collectors.toList());
-        return pessoaDTOS;
+        pessoaEnderecoDTOS = pessoas.stream().map(pessoa -> new PessoaEnderecoDTO(pessoa)).collect(Collectors.toList());
+        if (parametros.get("codigoPessoa") != null && pessoaDTOS.size() != 0) {
+            return pessoaEnderecoDTOS.stream().findFirst().get();
+        } else {
+            if (pessoaDTOS.size() != 0) {
+                return pessoaDTOS;
+            }
+            return new ArrayList<>();
+        }
     }
 
     private Specification<Pessoa> getPessoaSpecification(Map<String, String> parametros) {
@@ -211,6 +220,16 @@ public class PessoaService {
                     map(spec -> spec.and(PessoaSpecification.buscarPorCodigoPessoa(finalCodigoPessoa)))
                     .orElse(null);
         }
+
+        if (parametros.get("codigoPessoa") != null && !parametros.get("codigoPessoa").isEmpty()) {
+            Integer finalCodigoPessoa = codigoPessoa;
+            Integer finalStatus = status;
+            specification = Optional.ofNullable(where(PessoaSpecification.buscarPorCodigoPessoa(codigoPessoa)))
+                    .map(spec -> spec.and(PessoaSpecification.buscarPorStatus(finalStatus))).
+                    map(spec -> spec.and(PessoaSpecification.buscarPorLogin(parametros.get("login"))))
+                    .orElse(null);
+        }
+
 
         return specification;
     }
