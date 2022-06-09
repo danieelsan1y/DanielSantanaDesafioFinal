@@ -1,7 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.MunicipioDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.MunicipioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +35,4 @@ public class MunicipioController {
         List<MunicipioDTO> municipioDTOS = municipioService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(municipioDTOS);
     }
-
 }

@@ -2,7 +2,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.UfSpecification;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Uf;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.UfRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +25,24 @@ public class UfService {
 
     public void salvar(UfDTO ufDTO) {
         Uf uf = new Uf();
-        if(!(ufDTO.getSigla().length() > 3) ) {
+        if (!(ufDTO.getSigla().length() > 3)) {
 
-            if(ufDTO.getStatus() == 1 || ufDTO.getStatus() == 2) {
+            if (ufDTO.getStatus() == 1 || ufDTO.getStatus() == 2) {
                 uf.setStatus(ufDTO.getStatus());
                 uf.setSigla(ufDTO.getSigla());
                 uf.setNome(ufDTO.getNome());
                 converterParaMaiusculo(uf);
                 if (!verficarSeJaExisteNoBancoPorNome(uf.getNome())) {
-                    ufRepository.save(uf);
-                    UfDTO novoUfDTO = new UfDTO();
+                    if (!verificarSeJaExisteNoBancoPorSigla(uf.getSigla())) {
+                        ufRepository.save(uf);
+                    } else {
+                        throw new ServiceException("UF com essa sigla já cadastrado no banco!");
+                    }
+
                 } else {
-                    throw new ServiceException("Uf já cadastrado no banco!");
+                    throw new ServiceException("UF com esse nome já cadastrado no banco!");
                 }
-            } else{
+            } else {
                 throw new ServiceException("Valor para status não válido!");
             }
 
@@ -55,13 +59,13 @@ public class UfService {
     }
 
     public void alterar(UfDTO ufDTO) {
-        if (verficarSeJaExisteNoBancoPorCodigoUf(ufDTO.getCodigoUf())) {
+        if (verficarSeJaExisteNoBancoPorCodigoUf(ufDTO.getCodigoUF())) {
             Uf ufNovo = converterParaUf(ufDTO);
-            Uf ufAntigo = ufRepository.findByCodigoUf(ufDTO.getCodigoUf());
+            Uf ufAntigo = ufRepository.findByCodigoUf(ufDTO.getCodigoUF());
             alterarCampos(ufNovo, ufAntigo);
             ufRepository.save(ufAntigo);
         } else {
-            throw new ServiceException("Uf com o codigoUf: " + ufDTO.getCodigoUf() + " não esta cadastrado no Banco!");
+            throw new ServiceException("Uf com o codigoUF: " + ufDTO.getCodigoUF() + " não esta cadastrado no Banco!");
         }
 
     }
@@ -86,8 +90,8 @@ public class UfService {
         if (parametros.get("status") != null) {
             status = Integer.parseInt(parametros.get("status"));
         }
-        if (parametros.get("codigoUf") != null) {
-            codigoUf = Integer.parseInt(parametros.get("codigoUf"));
+        if (parametros.get("codigoUF") != null) {
+            codigoUf = Integer.parseInt(parametros.get("codigoUF"));
         }
 
         if (parametros.get("status") != null && !parametros.get("status").isEmpty()) {
@@ -117,7 +121,7 @@ public class UfService {
                     .map(spec -> spec.and(UfSpecification.buscarPorStatus(finalCodigoUf)))
                     .orElse(null);
         }
-        if (parametros.get("codigoUf") != null && !parametros.get("codigoUf").isEmpty()) {
+        if (parametros.get("codigoUF") != null && !parametros.get("codigoUF").isEmpty()) {
             Integer finalStatus = status;
             Integer finalCodigoUf = codigoUf;
             specification = Optional.ofNullable(where(UfSpecification.buscarPorCodigoUf(codigoUf)))
@@ -130,18 +134,26 @@ public class UfService {
     }
 
     private void alterarCampos(Uf ufNovo, Uf ufAntigo) {
-        if(!(ufAntigo.getSigla().length()>3)) {
-            ufAntigo.setSigla(ufNovo.getSigla());
-            ufAntigo.setNome(ufNovo.getNome());
-            if(ufAntigo.getStatus() == 1 || ufAntigo.getStatus() == 2) {
-                ufAntigo.setStatus(ufNovo.getStatus());
-                converterParaMaiusculo(ufAntigo);
-            } else{
-                throw new ServiceException("Valor para status não válido!");
+        if(!verficarSeJaExisteNoBancoPorNome(ufNovo.getNome().toUpperCase()) || ufNovo.getNome().toUpperCase().equals(ufAntigo.getNome())){
+            if (!(ufAntigo.getSigla().length() > 3)) {
+                if(!verificarSeJaExisteNoBancoPorSigla(ufNovo.getSigla().toUpperCase()) || ufNovo.getSigla().toUpperCase().equals(ufAntigo.getSigla())) {
+                    ufAntigo.setSigla(ufNovo.getSigla());
+                    ufAntigo.setNome(ufNovo.getNome());
+                    if (ufNovo.getStatus() == 1 || ufNovo.getStatus() == 2) {
+                        ufAntigo.setStatus(ufNovo.getStatus());
+                        converterParaMaiusculo(ufAntigo);
+                    } else {
+                        throw new ServiceException("Valor para status não válido!");
+                    }
+                } else {
+                    throw  new ServiceException("Sigla já existe no banco");
+                }
+
+            } else {
+                throw new ServiceException("Tamanho de sigla não permitido!");
             }
-        }
-        else {
-            throw new ServiceException("Tamanho de sigla não permitido!");
+        } else {
+            throw new ServiceException("UF com esse nome já cadastrado no banco!");
         }
     }
 
@@ -178,7 +190,7 @@ public class UfService {
     }
 
     private Uf converterParaUf(UfDTO ufDTO) {
-        Uf uf = new Uf(ufDTO.getCodigoUf(), ufDTO.getSigla(), ufDTO.getNome(), ufDTO.getStatus());
+        Uf uf = new Uf(ufDTO.getCodigoUF(), ufDTO.getSigla(), ufDTO.getNome(), ufDTO.getStatus());
         return uf;
     }
 }

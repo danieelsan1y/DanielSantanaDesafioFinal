@@ -1,9 +1,8 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity

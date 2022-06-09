@@ -1,10 +1,10 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.BairroDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Bairro;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Municipio;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Pessoa;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.BairoSpecification;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.MunicipioSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.BairroRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.MunicipioRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
@@ -31,57 +31,25 @@ public class BairroService {
 
     public void salvar(BairroDTO bairroDTO) {
         bairroDTO.setNome(bairroDTO.getNome().toUpperCase());
-        if (!verificarSeBairroJaExisteNoBancoPorNome(bairroDTO.getNome())) {
-            Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
-            if (municipio != null) {
-                Bairro bairro = new Bairro();
-                if(bairroDTO.getStatus() == 1 || bairroDTO.getStatus() == 2) {
-                    bairro.setStatus(bairroDTO.getStatus());
-                    bairro.setMunicipio(municipio);
-                    bairro.setNome(bairroDTO.getNome());
-                    bairroRepository.save(bairro);
-                } else{
-                    throw new ServiceException("Valor para status não válido!");
-                }
-
+        Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
+        if (municipio != null) {
+            Bairro bairro = new Bairro();
+            if (bairroDTO.getStatus() == 1 || bairroDTO.getStatus() == 2) {
+                bairro.setStatus(bairroDTO.getStatus());
+                bairro.setMunicipio(municipio);
+                bairro.setNome(bairroDTO.getNome());
+                bairroRepository.save(bairro);
             } else {
-                throw new ServiceException("Municipio com o codigoMunicipi0: " + bairroDTO.getCodigoMunicipio() + " não está cadastrado no banco!");
+                throw new ServiceException("Valor para status não válido!");
             }
 
         } else {
-            throw new ServiceException("Bairro " + bairroDTO.getNome() + " já cadastrado no banco!");
+            throw new ServiceException("Municipio com o codigoMunicipi0: " + bairroDTO.getCodigoMunicipio() + " não está cadastrado no banco!");
         }
     }
 
     public List<BairroDTO> buscarTodos() {
         List<Bairro> bairros = bairroRepository.findAll();
-        List<BairroDTO> bairrosDTO = bairros.stream().map(bairro -> new BairroDTO(bairro)).collect(Collectors.toList());
-        return bairrosDTO;
-    }
-
-    public BairroDTO buscarPorCodigoBairro(Integer codigoBairro) {
-        if (verificarSeBairroJaExisteNoBancoPorCodigoBairro(codigoBairro)) {
-            Bairro bairro = bairroRepository.findByCodigoBairro(codigoBairro);
-            BairroDTO bairroDTO = new BairroDTO(bairro);
-            return bairroDTO;
-        } else {
-            throw new ServiceException("Bairro com o id: " + codigoBairro + " não existe no Banco");
-        }
-
-    }
-
-    public List<BairroDTO> buscarPorCodigoMunicipio(Integer codigoMunicipio) {
-        if (verficarSeJaExisteNoBancoPorCodigoMunicipio(codigoMunicipio)) {
-            List<Bairro> bairros = bairroRepository.findAllByCodigoMunicipio(codigoMunicipio);
-            List<BairroDTO> bairrosDTO = bairros.stream().map(bairro -> new BairroDTO(bairro)).collect(Collectors.toList());
-            return bairrosDTO;
-        } else {
-            throw new ServiceException("Bairro com o codigo municipio: " + codigoMunicipio + " não existe no Banco");
-        }
-    }
-
-    public List<BairroDTO> buscarStatus(Integer status) {
-        List<Bairro> bairros = bairroRepository.findAllStatus(status);
         List<BairroDTO> bairrosDTO = bairros.stream().map(bairro -> new BairroDTO(bairro)).collect(Collectors.toList());
         return bairrosDTO;
     }
@@ -182,10 +150,10 @@ public class BairroService {
         Municipio municipio = municipioRepository.findByCodigoMunicipio(bairroDTO.getCodigoMunicipio());
         if (municipio != null) {
             bairroAntigo.setNome(bairroDTO.getNome().toUpperCase());
-            if(bairroDTO.getStatus() == 1 || bairroDTO.getStatus() == 2) {
+            if (bairroDTO.getStatus() == 1 || bairroDTO.getStatus() == 2) {
                 bairroAntigo.setStatus(bairroDTO.getStatus());
                 bairroAntigo.setMunicipio(municipio);
-            } else{
+            } else {
                 throw new ServiceException("Valor para status não válido!");
             }
 

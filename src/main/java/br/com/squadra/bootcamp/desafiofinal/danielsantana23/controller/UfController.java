@@ -1,7 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.UfDTO;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.UfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +34,4 @@ public class UfController {
         List<UfDTO> ufsDTO = ufService.buscarPorFiltro(parametros);
         return ResponseEntity.ok().body(ufsDTO);
     }
-
 }

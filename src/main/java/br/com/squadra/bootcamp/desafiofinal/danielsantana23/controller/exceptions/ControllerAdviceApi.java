@@ -2,6 +2,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.controller.exceptio
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.exceptions.SeviceErro;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.ServiceException;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.VazioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

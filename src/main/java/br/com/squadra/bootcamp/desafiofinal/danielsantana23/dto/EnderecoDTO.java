@@ -1,10 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Endereco;
 import java.io.Serializable;
 
 public class EnderecoDTO implements Serializable {

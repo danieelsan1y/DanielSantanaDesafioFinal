@@ -1,17 +1,12 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Uf;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UfDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer codigoUf;
+    private Integer codigoUF;
     private String sigla;
     private String nome;
     private Integer status;
@@ -19,26 +14,26 @@ public class UfDTO implements Serializable {
     public UfDTO() {
     }
 
-    public UfDTO(Integer codigoUf, String sigla, String nome, Integer status) {
-        this.codigoUf = codigoUf;
+    public UfDTO(Integer codigoUF, String sigla, String nome, Integer status) {
+        this.codigoUF = codigoUF;
         this.sigla = sigla;
         this.nome = nome;
         this.status = status;
     }
 
     public UfDTO(Uf uf) {
-        this.codigoUf = uf.getCodigoUf();
+        this.codigoUF = uf.getCodigoUf();
         this.sigla = uf.getSigla();
         this.nome = uf.getNome();
         this.status = uf.getStatus();
     }
 
-    public Integer getCodigoUf() {
-        return codigoUf;
+    public Integer getCodigoUF() {
+        return codigoUF;
     }
 
-    public void setCodigoUf(Integer codigoUf) {
-        this.codigoUf = codigoUf;
+    public void setCodigoUF(Integer codigoUF) {
+        this.codigoUF = codigoUF;
     }
 
     public String getSigla() {
@@ -64,5 +59,4 @@ public class UfDTO implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
-
 }

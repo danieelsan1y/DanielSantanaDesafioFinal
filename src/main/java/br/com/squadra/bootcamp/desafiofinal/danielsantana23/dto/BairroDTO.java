@@ -1,12 +1,11 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Bairro;
 import java.io.Serializable;
 
 
 public class BairroDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-
 
     private Integer codigoBairro;
     private Integer codigoMunicipio;
@@ -59,6 +58,5 @@ public class BairroDTO implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
-
 
 }

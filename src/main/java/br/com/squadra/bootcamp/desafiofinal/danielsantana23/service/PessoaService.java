@@ -1,9 +1,9 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.service;
 
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto.*;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Bairro;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Endereco;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Bairro;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Endereco;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Pessoa;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.specification.PessoaSpecification;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.BairroRepository;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.EnderecoRepository;
@@ -12,6 +12,7 @@ import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.exeption.Ser
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,17 +33,17 @@ public class PessoaService {
     @Autowired
     BairroRepository bairroRepository;
 
-    public void salvar(PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
+    public void salvar(PessoaSalvarAlterarDTO pessoaSalvarDTO) {
 
         pessoaSalvarDTO.setLogin(pessoaSalvarDTO.getLogin().toLowerCase());
         if (!verficarSeJaExisteNoBancoPorLogin(pessoaSalvarDTO.getLogin())) {
             Pessoa pessoa = new Pessoa();
-            pessoa.setNome(pessoaSalvarDTO.getNome());
+            pessoa.setNome(pessoaSalvarDTO.getNome().toUpperCase());
             if (pessoaSalvarDTO.getStatus() == 1 || pessoaSalvarDTO.getStatus() == 2) {
                 pessoa.setStatus(pessoaSalvarDTO.getStatus());
                 pessoa.setLogin(pessoaSalvarDTO.getLogin());
                 pessoa.setSenha(pessoaSalvarDTO.getSenha());
-                pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome());
+                pessoa.setSobrenome(pessoaSalvarDTO.getSobrenome().toUpperCase());
                 salvarEnderecos(pessoa, pessoaSalvarDTO.getEnderecosDTO());
             } else {
                 throw new ServiceException("Valor para status não válido!");
@@ -54,19 +55,19 @@ public class PessoaService {
 
     }
 
-    public void atualizar(PessoaSalvarAtrerarDTO pessoaSalvarDTO) {
+    public void atualizar(PessoaSalvarAlterarDTO pessoaSalvarDTO) {
         Pessoa pessoaAntiga = pessoaRepository.findByCodigoPessoa(pessoaSalvarDTO.getCodigoPessoa());
         if (verficarSeJaExisteNoBancoPorCodigoPessoa(pessoaSalvarDTO.getCodigoPessoa())) {
             pessoaAntiga.setSobrenome(pessoaSalvarDTO.getSobrenome().toUpperCase());
             pessoaAntiga.setNome(pessoaSalvarDTO.getNome().toUpperCase());
             pessoaAntiga.setSenha(pessoaSalvarDTO.getSenha());
 
-            if(pessoaSalvarDTO.getStatus() == 1 || pessoaSalvarDTO.getStatus() == 2) {
+            if (pessoaSalvarDTO.getStatus() == 1 || pessoaSalvarDTO.getStatus() == 2) {
                 pessoaAntiga.setStatus(pessoaSalvarDTO.getStatus());
                 pessoaAntiga.setLogin(pessoaSalvarDTO.getLogin().toLowerCase());
                 atualizarEndereco(pessoaAntiga, pessoaSalvarDTO.getEnderecosDTO());
                 pessoaRepository.save(pessoaAntiga);
-            } else{
+            } else {
                 throw new ServiceException("Valor para status não válido!");
             }
 
@@ -87,9 +88,8 @@ public class PessoaService {
             PessoaEnderecoDTO pessoaRelacionamentoDTO = new PessoaEnderecoDTO(pessoa);
             return pessoaRelacionamentoDTO;
         } else {
-            throw new ServiceException("Pessoa com codigoPessoa: " + codigoPessoa + ", não esta cadastrado no Banco!");
+            throw new ServiceException("Não existe pessoa com codigoPessoa: "+codigoPessoa);
         }
-
     }
 
     private void atualizarEndereco(Pessoa pessoaAntiga, List<EnderecoDTO> enderecos) {
@@ -102,7 +102,6 @@ public class PessoaService {
             if (enderecoAntigo != null) {
                 enderecosAtualizados.add(enderecoAntigo);
                 Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
-                //enderecoAntigo.setStatus(endereco.getStatus());
                 enderecoAntigo.setComplemento(endereco.getComplemento());
                 enderecoAntigo.setNumero(endereco.getNumero());
                 enderecoAntigo.setNomeRua(endereco.getNomeRua());
@@ -147,25 +146,29 @@ public class PessoaService {
     }
 
     private void salvarEnderecos(Pessoa pessoa, List<EnderecoDTO> enderecos) {
-        enderecos.stream().map(endereco -> {
-            Endereco novosEnderecos = new Endereco();
-            Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
-            if (bairro != null) {
-                pessoaRepository.save(pessoa);
-                novosEnderecos.setBairro(bairro);
-                novosEnderecos.setPessoa(pessoa);
-                novosEnderecos.setCep(endereco.getCep());
-                novosEnderecos.setNomeRua(endereco.getNomeRua());
-                novosEnderecos.setNumero(endereco.getNumero());
-                novosEnderecos.setComplemento(endereco.getComplemento());
-                novosEnderecos.setStatus(1);
-                enderecoRepository.save(novosEnderecos);
-                return novosEnderecos;
-            } else {
-                throw new ServiceException("Bairro com codigoBairro: " + endereco.getCodigoBairro() + ", não esta cadastrado no Banco!");
-            }
+        if(!enderecos.isEmpty()) {
+            enderecos.stream().map(endereco -> {
+                Endereco novosEnderecos = new Endereco();
+                Bairro bairro = bairroRepository.findByCodigoBairro(endereco.getCodigoBairro());
+                if (bairro != null) {
+                    pessoaRepository.save(pessoa);
+                    novosEnderecos.setBairro(bairro);
+                    novosEnderecos.setPessoa(pessoa);
+                    novosEnderecos.setCep(endereco.getCep());
+                    novosEnderecos.setNomeRua(endereco.getNomeRua());
+                    novosEnderecos.setNumero(endereco.getNumero());
+                    novosEnderecos.setComplemento(endereco.getComplemento());
+                    novosEnderecos.setStatus(1);
+                        enderecoRepository.save(novosEnderecos);
+                    return novosEnderecos;
+                } else {
+                    throw new ServiceException("Bairro com codigoBairro: " + endereco.getCodigoBairro() + ", não esta cadastrado no Banco!");
+                }
 
-        }).collect(Collectors.toList());
+            }).collect(Collectors.toList());
+        } else {
+            throw new ServiceException("Não é possível cadastrar pessoa sem endereço!");
+        }
     }
 
     public List<PessoaDTO> buscarPorFiltro(Map<String, String> parametros) {
@@ -173,14 +176,14 @@ public class PessoaService {
         if (parametros == null || parametros.isEmpty()) {
             return pessoaDTOS = pessoaRepository.findAll().stream().map(pessoa -> new PessoaDTO(pessoa)).collect(Collectors.toList());
         }
-        Specification<Pessoa> specification = getMunicipioSpecification(parametros);
+        Specification<Pessoa> specification = getPessoaSpecification(parametros);
 
         List<Pessoa> pessoas = pessoaRepository.findAll(specification);
         pessoaDTOS = pessoas.stream().map(pessoa -> new PessoaDTO(pessoa)).collect(Collectors.toList());
         return pessoaDTOS;
     }
 
-    private Specification<Pessoa> getMunicipioSpecification(Map<String, String> parametros) {
+    private Specification<Pessoa> getPessoaSpecification(Map<String, String> parametros) {
 
         Specification<Pessoa> specification = null;
         Integer status = null;

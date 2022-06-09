@@ -1,17 +1,10 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.test;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.*;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.*;
 import br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository.*;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.service.BairroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Arrays;
 
 @Configuration
 

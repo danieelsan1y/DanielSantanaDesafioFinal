@@ -1,6 +1,4 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

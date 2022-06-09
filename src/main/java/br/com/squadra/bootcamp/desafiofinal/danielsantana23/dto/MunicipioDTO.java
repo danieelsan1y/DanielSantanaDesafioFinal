@@ -1,25 +1,21 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Municipio;
 import java.io.Serializable;
 
 public class MunicipioDTO  implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoMunicipio;
-    private Integer codigoUf;
+    private Integer codigoUF;
     private String nome;
     private Integer status;
 
 
 
-    public MunicipioDTO(Integer codigoMunicipio, Integer codigoUf, String nome, Integer status) {
+    public MunicipioDTO(Integer codigoMunicipio, Integer codigoUF, String nome, Integer status) {
         this.codigoMunicipio = codigoMunicipio;
-        this.codigoUf = codigoUf;
+        this.codigoUF = codigoUF;
         this.nome = nome;
         this.status = status;
 
@@ -27,7 +23,7 @@ public class MunicipioDTO  implements Serializable {
 
     public MunicipioDTO(Municipio municipio) {
         this.codigoMunicipio = municipio.getCodigoMunicipio();
-        this.codigoUf = municipio.getUf().getCodigoUf();
+        this.codigoUF = municipio.getUf().getCodigoUf();
         this.nome = municipio.getNome();
         this.status = municipio.getStatus();
 
@@ -42,11 +38,11 @@ public class MunicipioDTO  implements Serializable {
     }
 
     public Integer getCodigoUf() {
-        return codigoUf;
+        return codigoUF;
     }
 
-    public void setCodigoUf(Integer codigoUf) {
-        this.codigoUf = codigoUf;
+    public void setCodigoUf(Integer codigoUF) {
+        this.codigoUF = codigoUF;
     }
 
     public String getNome() {
@@ -64,6 +60,5 @@ public class MunicipioDTO  implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
-
 
 }

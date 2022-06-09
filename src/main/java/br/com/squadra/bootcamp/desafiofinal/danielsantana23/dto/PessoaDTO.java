@@ -1,17 +1,8 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Pessoa;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Pessoa;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class PessoaDTO implements Serializable {
     private static final long serialVersionUID = 1L;

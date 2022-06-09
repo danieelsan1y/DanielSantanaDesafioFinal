@@ -1,6 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.repository;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Uf;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Uf;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +14,6 @@ public interface UfRepository extends JpaRepository<Uf, Integer>, JpaSpecificati
 
     public Uf findByNome(String nome);
 
-    public Uf findBySigla(String sigla);
 
     public Uf findByCodigoUf(Integer codigoUf);
 
@@ -22,6 +21,8 @@ public interface UfRepository extends JpaRepository<Uf, Integer>, JpaSpecificati
 
     @Query("select u from Uf u where u.status = :status")
     public List<Uf> findAllAtivos(@Param("status") Integer status);
+
+    public Uf findBySigla(String sigla);
 
 
 

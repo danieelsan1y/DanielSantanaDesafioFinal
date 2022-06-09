@@ -1,12 +1,8 @@
-package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "tb_bairro")

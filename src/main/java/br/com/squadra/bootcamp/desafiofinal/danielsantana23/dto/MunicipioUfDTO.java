@@ -1,6 +1,6 @@
 package br.com.squadra.bootcamp.desafiofinal.danielsantana23.dto;
 
-import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.Municipio;
+import br.com.squadra.bootcamp.desafiofinal.danielsantana23.model.entities.Municipio;
 
 import java.io.Serializable;
 
@@ -8,15 +8,15 @@ public class MunicipioUfDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer codigoMunicipio;
-    private Integer codigoUf;
+    private Integer codigoUF;
     private String nome;
     private Integer status;
-    private UfDTO ufDTO;
+    private UfDTO UF;
 
 
-    public MunicipioUfDTO(Integer codigoMunicipio, Integer codigoUf, String nome, Integer status) {
+    public MunicipioUfDTO(Integer codigoMunicipio, Integer codigoUF, String nome, Integer status) {
         this.codigoMunicipio = codigoMunicipio;
-        this.codigoUf = codigoUf;
+        this.codigoUF = codigoUF;
         this.nome = nome;
         this.status = status;
 
@@ -24,10 +24,10 @@ public class MunicipioUfDTO implements Serializable {
 
     public MunicipioUfDTO(Municipio municipio) {
         this.codigoMunicipio = municipio.getCodigoMunicipio();
-        this.codigoUf = municipio.getUf().getCodigoUf();
+        this.codigoUF = municipio.getUf().getCodigoUf();
         this.nome = municipio.getNome();
         this.status = municipio.getStatus();
-        ufDTO = new UfDTO(municipio.getUf());
+        UF = new UfDTO(municipio.getUf());
 
     }
 
@@ -39,12 +39,12 @@ public class MunicipioUfDTO implements Serializable {
         this.codigoMunicipio = codigoMunicipio;
     }
 
-    public Integer getCodigoUf() {
-        return codigoUf;
+    public Integer getCodigoUF() {
+        return codigoUF;
     }
 
-    public void setCodigoUf(Integer codigoUf) {
-        this.codigoUf = codigoUf;
+    public void setCodigoUF(Integer codigoUF) {
+        this.codigoUF = codigoUF;
     }
 
     public String getNome() {
@@ -63,11 +63,11 @@ public class MunicipioUfDTO implements Serializable {
         this.status = status;
     }
 
-    public UfDTO getUfDTO() {
-        return ufDTO;
+    public UfDTO getUF() {
+        return UF;
     }
 
-    public void setUfDTO(UfDTO ufDTO) {
-        this.ufDTO = ufDTO;
+    public void setUF(UfDTO UF) {
+        this.UF = UF;
     }
 }

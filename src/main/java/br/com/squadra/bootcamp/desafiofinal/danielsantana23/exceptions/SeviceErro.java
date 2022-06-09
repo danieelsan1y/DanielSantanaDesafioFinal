@@ -3,7 +3,7 @@ package br.com.squadra.bootcamp.desafiofinal.danielsantana23.exceptions;
 
 public class SeviceErro {
     private String status;
-    private  String Mensagem;
+    private String Mensagem;
 
     public SeviceErro(String status, String mensagem) {
         this.status = status;
