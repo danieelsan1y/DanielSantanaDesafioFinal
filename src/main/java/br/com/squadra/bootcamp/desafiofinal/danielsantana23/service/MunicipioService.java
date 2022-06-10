@@ -69,7 +69,7 @@ public class MunicipioService {
     }
 
     private void alterarCampos(MunicipioDTO municipioDTO, Municipio municipioAntigo) {
-        if (!verificarSeMunicipioJaExisteNoBancoPorNome(municipioDTO.getNome().toUpperCase()) || municipioDTO.getNome().toUpperCase().equals(municipioDTO.getNome())) {
+        if (!verificarSeMunicipioJaExisteNoBancoPorNome(municipioDTO.getNome().toUpperCase()) || municipioDTO.getNome().toUpperCase().equals(municipioAntigo.getNome())) {
             Uf uf = ufRepository.findByCodigoUf(municipioDTO.getCodigoUf());
             if (uf != null) {
                 municipioAntigo.setNome(municipioDTO.getNome().toUpperCase());
